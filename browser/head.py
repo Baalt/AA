@@ -1,13 +1,24 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
-from config import LOGIN, PASSWORD
+from config import SOURCE, LOGIN, PASSWORD
 
-class Browser :
+
+class Browser:
     def __init__(self):
         self.firefox = webdriver.Firefox()
         self.firefox.maximize_window()
-        self.firefox.get('https://smart-tables.ru/login')
+
+    @property
+    def get_html(self):
+        return self.firefox.page_source
+
+    def open_new_page(self, match_url: str):
+        match_url = SOURCE + match_url
+        self.firefox.get(match_url)
+
+    def login(self):
+        self.firefox.get(SOURCE + '/login')
         self.firefox.implicitly_wait(10)
 
         email = self.firefox.find_element(By.ID, 'email', )
@@ -17,12 +28,5 @@ class Browser :
         password.send_keys(PASSWORD)
         self.firefox.implicitly_wait(10)
 
-        self.firefox.find_element(By.XPATH, "//button[text()='Войти']").click()
-
-    @property
-    def get_html(self):
-        return self.firefox.page_source
-
-    def open_new_page(self, match_url: str):
-        match_url = 'https://smart-tables.ru' + match_url
-        self.firefox.get(match_url)
+        ENTER_BUTTON_XPATH =  "//button[text()='Войти']"
+        self.firefox.find_element(By.XPATH, ENTER_BUTTON_XPATH).click()
