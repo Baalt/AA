@@ -16,8 +16,8 @@ class Button:
 
     @property
     def statistic_buttons(self):
-        STATISTIC_BUTTONS_XPATH = '//div[@class="btn-group stat-picker-desktop"]' \
-                                  '/button[contains(@class, "btn btn-sm btn-light"]'
+        STATISTIC_BUTTONS_XPATH = '//div[contains(@class, "stat-picker-desktop")]' \
+                                  '/button[contains(@class, "btn btn-sm btn-light")]'
         statistic_buttons = self.browser.firefox.find_elements(By.XPATH, STATISTIC_BUTTONS_XPATH)
 
         return statistic_buttons
@@ -68,6 +68,7 @@ class MatchButtons(Button):
 
         return current_league_home_command_button, current_league_away_command_button
 
+    @property
     def coefficient_button(self):
         COEFFICIENT_BUTTON_XPATH = '//a[@class="nav-link accent-hvr cursor-pointer"]' \
                                    '/span[normalize-space(text())="Коэффициенты"]'
@@ -76,6 +77,15 @@ class MatchButtons(Button):
                                                                COEFFICIENT_BUTTON_XPATH)
 
         return coefficient_button
+
+    @property
+    def coefficient_handicap_button(self):
+        HANDICAP_BUTTON_XPATH = '//div[contains(@class, "stat_format-picker")]' \
+                                '/button[normalize-space(text())="Исходы и форы"]'
+
+        coefficient_handicap_button = self.browser.firefox.find_element(By.XPATH, HANDICAP_BUTTON_XPATH)
+
+        return coefficient_handicap_button
 
 
 if __name__ == '__main__':
