@@ -86,7 +86,3 @@ class MatchButtons(Button):
         coefficient_handicap_button = self.browser.firefox.find_element(By.XPATH, HANDICAP_BUTTON_XPATH)
 
         return coefficient_handicap_button
-
-
-if __name__ == '__main__':
-    pass

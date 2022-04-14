@@ -12,6 +12,7 @@ class MatchDataNormalize:
             year_or_years = self.strip_year(season_and_year[-1])
             if len(year_or_years) == 2:
                 first_half_season_year, second_half_season_year = year_or_years
+                first_half_season_year = '20' + first_half_season_year
                 second_half_season_year = '20' + second_half_season_year
 
                 return self.determine_the_year_by_the_month_of_the_season(first_half_season_year=first_half_season_year,
@@ -32,5 +33,9 @@ class MatchDataNormalize:
             return f'{self.day_month}.{first_half_season_year}'
 
 
+
+class LastYearFilter:
+    pass
+
 if __name__ == '__main__':
-    print(MatchDataNormalize(season='ITA1\n                (2021)', day_month='13.08').convert_season_to_dmY())
+    print(MatchDataNormalize(season='ITA1\n                (21/22)', day_month='13.08').convert_season_to_dmY())
