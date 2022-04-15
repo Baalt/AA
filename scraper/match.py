@@ -11,8 +11,9 @@ class MatchScraper(ScraperMethods):
     def __str__(self) -> str:
         return '{}'.format(self.all_match_data)
 
-    def show_data(self):
-        print(self.all_match_data)
+    @property
+    def match_data(self):
+        return self.all_match_data
 
     def scrap_commands_name(self, soup: BeautifulSoup):
         self.home_command_name = soup.find_all('div',
@@ -34,8 +35,8 @@ class MatchScraper(ScraperMethods):
         self.statistic_name = self.scrap_statistic_name(soup=soup, tooltip=tooltip)
         self.all_match_data[self.statistic_name] = {'home_collections': list(), 'away_collections': list()}
 
-        [self.scrap_them_collect_to_global_storage(row, 'home_collections') for row in home_table if len(row) > 5]
-        [self.scrap_them_collect_to_global_storage(row, 'away_collections') for row in away_table if len(row) > 5]
+        [self.scrap_them_collect_to_global_storage(row, 'home_collections') for row in home_table]
+        [self.scrap_them_collect_to_global_storage(row, 'away_collections') for row in away_table]
 
     def scrap_them_collect_to_global_storage(self, row: BeautifulSoup, home_away_key: str):
         season = row.find_all('td')[1].find('a').get_text(strip=True)
@@ -56,3 +57,30 @@ class MatchScraper(ScraperMethods):
                         'away_command_individual_total': away_command_individual_total}
 
         self.all_match_data[self.statistic_name][home_away_key].append(data_collect)
+
+    def get_count_of_games_and_name_with_last_trainer(self, soup: BeautifulSoup):
+        home_table = soup.find_all('table',
+                                   id='table')[0].find('tbody').find_all('tr')
+        away_table = soup.find_all('table',
+                                   id='table')[1].find('tbody').find_all('tr')
+
+        def add_trainer_date(table, home_away_trainer_key: str):
+            n = 0
+            for tr in table:
+                if len(tr) == 21:
+                    n += 1
+                elif len(tr) == 1:
+                    text: str = tr.get_text(strip=True)
+                    if text.startswith('❗'):
+                        self.all_match_data[home_away_trainer_key] = {'count_games_with_command': n,
+                                                                      'trainer_name': text}
+
+            try:
+                self.all_match_data[home_away_trainer_key]
+            except KeyError:
+                self.all_match_data[home_away_trainer_key] = {'count_games_with_command': n,
+                                                              'trainer_name': f'Maybe trainer not changed for {n} games'
+                                                                              'clarify information'}
+
+        add_trainer_date(home_table, 'home_trainer')
+        add_trainer_date(away_table, 'away_trainer')

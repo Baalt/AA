@@ -45,6 +45,7 @@ class MatchManager(MatchButtons):
 
     def get_match_data(self, soup: BeautifulSoup):
         self.match_scraper.scrap_commands_name(soup=soup)
+        self.match_scraper.get_count_of_games_and_name_with_last_trainer(soup=soup)
         self.match_scraper.scrap_match_table_data(soup=soup)
 
         for button in self.statistic_buttons[1:10]:
