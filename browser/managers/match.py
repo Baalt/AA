@@ -2,7 +2,7 @@ from time import sleep
 from bs4 import BeautifulSoup
 
 from browser.head import Browser
-from browser.buttons import MatchButtons
+from browser.buttons.match import MatchButtons
 from scraper.match import MatchScraper
 
 
@@ -16,7 +16,7 @@ class MatchManager(MatchButtons):
         self.match_scraper = MatchScraper(all_match_data=self.all_match_data)
         # buttons
         self.quantity_of_matches_input, \
-        self.quantity_of_matches_fix_input_clicker = self.quantity_of_matches_button
+        self.quantity_of_matches_fix_input_clicker = self.quantity_of_matches_buttons
 
         self.season_home_button_all, \
         self.season_away_button_all = self.teams_season_buttons_all
@@ -25,7 +25,7 @@ class MatchManager(MatchButtons):
         self.current_league_away_command_button = self.current_league_command_buttons(league=self.league)
 
     @property
-    def match_data(self):
+    def get_data(self):
         return self.all_match_data
 
     def filter_out(self, number_of_matches: int = 100):

@@ -2,7 +2,7 @@ from time import sleep
 from bs4 import BeautifulSoup
 
 from browser.head import Browser
-from browser.buttons import MatchButtons
+from browser.buttons.match import MatchButtons
 from scraper.parent import ScraperMethods
 from scraper.coefficients import CoefficientsScraper
 
@@ -14,7 +14,7 @@ class CoefficientManager(MatchButtons, ScraperMethods):
         self.coefficient_scraper = CoefficientsScraper()
 
     @property
-    def coefficient_data(self):
+    def get_data(self):
         return self.all_coefficient_data
 
     def create_dict_structure(self, soup: BeautifulSoup, tooltip=False):
@@ -27,7 +27,7 @@ class CoefficientManager(MatchButtons, ScraperMethods):
         }
 
     def get_coefficients_data(self):
-        self.coefficient_button.click()
+        self.open_coefficient_button.click()
         sleep(6)  # find element location By.XPATH
 
         # try:

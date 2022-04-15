@@ -2,7 +2,7 @@ from time import sleep
 from bs4 import BeautifulSoup
 
 from browser.head import Browser
-from browser.buttons import LeagueButtons
+from browser.buttons.league import LeagueButtons
 from scraper.league import LeagueScraper
 
 
