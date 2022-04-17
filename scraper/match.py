@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 
 from scraper.parent import ScraperMethods
-from scraper.sort import MatchDataNormalize
+from math.filters.convert_from_big_data_to_math_input import MatchDataNormalize
 
 
 class MatchScraper(ScraperMethods):
