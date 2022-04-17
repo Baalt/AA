@@ -26,16 +26,17 @@ class MatchDataNormalize:
     def determine_the_year_by_the_month_of_the_season(self,
                                                       first_half_season_year: str,
                                                       second_half_season_year: str):
-        match_date = datetime.strptime(self.day_month, "%d.%m")
-        if match_date.month in range(1, 7):
-            return f'{self.day_month}.{second_half_season_year}'
-        if match_date.month in range(7, 13):
-            return f'{self.day_month}.{first_half_season_year}'
+        try:
+            match_date = datetime.strptime(self.day_month, "%d.%m")
 
+            if match_date.month in range(1, 7):
+                return f'{self.day_month}.{second_half_season_year}'
+            if match_date.month in range(7, 13):
+                return f'{self.day_month}.{first_half_season_year}'
 
+        except ValueError as err:
+            print(f'Value Error: "{err}"')
 
-class LastYearFilter:
-    pass
 
 if __name__ == '__main__':
     print(MatchDataNormalize(season='ITA1\n                (21/22)', day_month='13.08').convert_season_to_dmY())

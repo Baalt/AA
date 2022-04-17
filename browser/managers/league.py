@@ -13,6 +13,7 @@ class LeagueManager(LeagueButtons):
         self.soup: BeautifulSoup = soup
         self.league_scraper = LeagueScraper()
 
+    @property
     def get_data(self):
         all_league_data: dict = {}
         self.league_scraper.scrap(self.soup, all_league_data, tooltip=True)

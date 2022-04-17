@@ -72,15 +72,16 @@ class MatchScraper(ScraperMethods):
                 elif len(tr) == 1:
                     text: str = tr.get_text(strip=True)
                     if text.startswith('❗'):
-                        self.all_match_data[home_away_trainer_key] = {'count_games_with_command': n,
+                        self.all_match_data[home_away_trainer_key] = {f'count_games_with_command_{home_away_trainer_key}_trainer': n,
                                                                       'trainer_name': text}
+                        break
 
             try:
                 self.all_match_data[home_away_trainer_key]
             except KeyError:
                 self.all_match_data[home_away_trainer_key] = {'count_games_with_command': n,
                                                               'trainer_name': f'Maybe trainer not changed for {n} games'
-                                                                              'clarify information'}
+                                                                              ' clarify information'}
 
         add_trainer_date(home_table, 'home_trainer')
         add_trainer_date(away_table, 'away_trainer')
