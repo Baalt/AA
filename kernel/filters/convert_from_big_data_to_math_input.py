@@ -1,3 +1,4 @@
+import re
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
@@ -10,7 +11,7 @@ class LastYearFilter:
 
     def filter_home_away_collections(self, home_away_key: str):
         for statistic_name in self.all_match_data:
-            if isinstance(self.all_match_data[statistic_name], dict) and not statistic_name.endswith('trainer'):
+            if not statistic_name.startswith('home') and not statistic_name.startswith('away'):
                 copy_list_of_matches = self.all_match_data[statistic_name][home_away_key].copy()
                 for match in copy_list_of_matches:
                     try:
@@ -62,21 +63,17 @@ class MatchDataNormalize:
         self.day_month = day_month
 
     def convert_season_to_dmY(self):
-        season_and_year = self.season.split()
-        if len(season_and_year) == 2:
-            year_or_years = self.strip_year(season_and_year[-1])
-            if len(year_or_years) == 2:
-                first_half_season_year, second_half_season_year = year_or_years
-                first_half_season_year = '20' + first_half_season_year
-                second_half_season_year = '20' + second_half_season_year
+        match = re.search('\d{2}/\d{2}', self.season)
+        year_or_years = match.group().split('/')
+        if len(year_or_years) == 2:
+            first_half_season_year, second_half_season_year = year_or_years
+            first_half_season_year = '20' + first_half_season_year
+            second_half_season_year = '20' + second_half_season_year
 
-                return self.determine_the_year_by_the_month_of_the_season(first_half_season_year=first_half_season_year,
-                                                                          second_half_season_year=second_half_season_year)
-            elif isinstance(year_or_years, str):
-                return f'{self.day_month}.{year_or_years}'
-
-    def strip_year(self, year: str) -> str:
-        return year.strip('()') if '/' not in year else year.strip('()').split('/')
+            return self.determine_the_year_by_the_month_of_the_season(first_half_season_year=first_half_season_year,
+                                                                      second_half_season_year=second_half_season_year)
+        elif isinstance(year_or_years, str):
+            return f'{self.day_month}.{year_or_years}'
 
     def determine_the_year_by_the_month_of_the_season(self,
                                                       first_half_season_year: str,

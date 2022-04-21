@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 
 from scraper.parent import ScraperMethods
-from math.filters.convert_from_big_data_to_math_input import MatchDataNormalize
+from kernel.filters.convert_from_big_data_to_math_input import MatchDataNormalize
 
 
 class RefereeScraper(ScraperMethods):
