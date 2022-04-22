@@ -17,6 +17,9 @@ class RefereeManager(RefereeButtons):
     def get_data(self):
         return self.all_referee_data
 
+    def is_referee_here(self):
+        return True if self.all_referee_data else False
+
     def get_referee_data(self):
         self.open_referee_button.click()
         self.filter_out(number_of_matches=100)

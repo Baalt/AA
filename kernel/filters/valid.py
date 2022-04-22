@@ -3,19 +3,13 @@ class ValidStructureFilter:
         self.home_structure = home_structure
         self.away_structure = away_structure
 
-    def ran(self):
+    def valid_and_create(self):
         if self.is_home_structure_valid() and self.is_away_structure_valid():
             self.adding_home_structures_for_the_latest_games()
             self.adding_away_structures_for_the_latest_games()
             # test mode
             # self.home_valid_structure_print()
             # self.away_valid_structure_print()
-
-    def home_structure(self):
-        return self.home_structure
-
-    def away_structure(self):
-        return self.away_structure
 
     def adding_home_structures_for_the_latest_games(self):
         # last20 home-away games
