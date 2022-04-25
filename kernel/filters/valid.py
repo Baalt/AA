@@ -1,5 +1,8 @@
+from kernel.structures import HomeDataStructure, AwayDataStructure
+
+
 class ValidStructureFilter:
-    def __init__(self, home_structure, away_structure):
+    def __init__(self, home_structure: HomeDataStructure, away_structure: AwayDataStructure):
         self.home_structure = home_structure
         self.away_structure = away_structure
 
@@ -50,7 +53,7 @@ class ValidStructureFilter:
             self.away_structure.last_year_individual_total_current_away_command_in_home_away_games[:20]
 
         self.away_structure.last_20_games_individual_total_opposing_teams_current_away_by_year_in_home_away_games = \
-            self.away_structure.last_year_individual_total_opposing_teams_current_away_command_in_home_away_games[
+            self.away_structure.last_year_individual_total_opposing_teams_current_away_in_home_away_games[
             :20]
         # last8 home-away games
         self.away_structure.last_8_games_total_current_away_by_year_in_home_away_games = \
@@ -60,7 +63,7 @@ class ValidStructureFilter:
             self.away_structure.last_year_individual_total_current_away_command_in_home_away_games[:8]
 
         self.away_structure.last_8_games_individual_total_opposing_teams_current_away_by_year_in_home_away_games = \
-            self.away_structure.last_year_individual_total_opposing_teams_current_away_command_in_home_away_games[:8]
+            self.away_structure.last_year_individual_total_opposing_teams_current_away_in_home_away_games[:8]
         # last4 home-away games
         self.away_structure.last_4_games_total_current_away_by_year_in_home_away_games = \
             self.away_structure.last_year_total_current_away_command_in_home_away_games[:4]
@@ -69,7 +72,7 @@ class ValidStructureFilter:
             self.away_structure.last_year_individual_total_current_away_command_in_home_away_games[:4]
 
         self.away_structure.last_4_games_individual_total_opposing_teams_current_away_by_year_in_home_away_games = \
-            self.away_structure.last_year_individual_total_opposing_teams_current_away_command_in_home_away_games[:4]
+            self.away_structure.last_year_individual_total_opposing_teams_current_away_in_home_away_games[:4]
 
     def home_valid_structure_print(self):
         print('home big data')
@@ -113,7 +116,7 @@ class ValidStructureFilter:
         print(self.away_structure.last_year_total_current_away_command_in_home_away_games)
         print(self.away_structure.last_year_individual_total_current_away_command_in_home_away_games)
         print(
-            self.away_structure.last_year_individual_total_opposing_teams_current_away_command_in_home_away_games)
+            self.away_structure.last_year_individual_total_opposing_teams_current_away_in_home_away_games)
         print('away last 20')
         print(self.away_structure.last_20_games_total_current_away_by_year_in_home_away_games)
         print(
@@ -124,7 +127,7 @@ class ValidStructureFilter:
         print(self.away_structure.last_12_games_total_current_away_command_by_year_in_away_games)
         print(self.away_structure.last_12_games_individual_total_current_away_by_year_in_away_games)
         print(
-            self.away_structure.last_12_games_individual_total_opposing_teams_current_away_by_year_in_home_games)
+            self.away_structure.last_12_games_individual_total_opposing_teams_current_away_by_year_in_away_games)
         print('away last8')
         print(self.away_structure.last_8_games_total_current_away_by_year_in_home_away_games)
         print(self.away_structure.last_8_games_individual_total_current_away_by_year_in_home_away_games)
@@ -145,7 +148,8 @@ class ValidStructureFilter:
                     self.home_structure.last_12_games_individual_total_opposing_teams_current_home_by_year_in_away_games):
 
                     if len(self.home_structure.last_year_total_current_home_command_in_home_away_games) >= 20 and len(
-                            self.home_structure.last_12_games_total_current_home_command_by_year_in_home_games) >= 12:
+                            self.home_structure.last_12_games_total_current_home_command_by_year_in_home_games) >= 12 and \
+                            len(self.home_structure.similar_command_total_current_home_big_data_home_away_games) > 8:
                         return True
                     return False
             return False
@@ -155,14 +159,15 @@ class ValidStructureFilter:
         if self.away_structure:
             if len(self.away_structure.last_year_total_current_away_command_in_home_away_games) == len(
                     self.away_structure.last_year_individual_total_current_away_command_in_home_away_games) and len(
-                self.away_structure.last_year_individual_total_opposing_teams_current_away_command_in_home_away_games):
+                self.away_structure.last_year_individual_total_opposing_teams_current_away_in_home_away_games):
 
                 if len(self.away_structure.last_12_games_total_current_away_command_by_year_in_away_games) == len(
                         self.away_structure.last_12_games_individual_total_current_away_by_year_in_away_games) and len(
-                    self.away_structure.last_12_games_individual_total_opposing_teams_current_away_by_year_in_home_games):
+                    self.away_structure.last_12_games_individual_total_opposing_teams_current_away_by_year_in_away_games):
 
                     if len(self.away_structure.last_year_total_current_away_command_in_home_away_games) >= 20 and len(
-                            self.away_structure.last_12_games_total_current_away_command_by_year_in_away_games) >= 12:
+                            self.away_structure.last_12_games_total_current_away_command_by_year_in_away_games) >= 12 and \
+                            len(self.away_structure.similar_command_total_current_away_big_data_home_away_games > 8):
                         return True
                     return False
                 return False
