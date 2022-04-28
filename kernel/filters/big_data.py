@@ -63,17 +63,21 @@ class MatchDataNormalize:
         self.day_month = day_month
 
     def convert_season_to_dmY(self):
-        match = re.search('\d{2}/\d{2}', self.season)
-        year_or_years = match.group().split('/')
-        if len(year_or_years) == 2:
-            first_half_season_year, second_half_season_year = year_or_years
-            first_half_season_year = '20' + first_half_season_year
-            second_half_season_year = '20' + second_half_season_year
+        try:
+            match = re.search('\d{2}/\d{2}', self.season)
+            year_or_years = match.group().split('/')
+            if len(year_or_years) == 2:
+                first_half_season_year, second_half_season_year = year_or_years
+                first_half_season_year = '20' + first_half_season_year
+                second_half_season_year = '20' + second_half_season_year
 
-            return self.determine_the_year_by_the_month_of_the_season(first_half_season_year=first_half_season_year,
-                                                                      second_half_season_year=second_half_season_year)
-        elif isinstance(year_or_years, str):
-            return f'{self.day_month}.{year_or_years}'
+                return self.determine_the_year_by_the_month_of_the_season(first_half_season_year=first_half_season_year,
+                                                                          second_half_season_year=second_half_season_year)
+        except AttributeError:
+            match = re.search('\d{2}', self.season)
+            if match:
+                year_or_years = '20' + match
+                return f'{self.day_month}.{year_or_years}'
 
     def determine_the_year_by_the_month_of_the_season(self,
                                                       first_half_season_year: str,

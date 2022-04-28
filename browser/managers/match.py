@@ -45,15 +45,21 @@ class MatchManager(MatchButtons):
 
     def get_match_data(self, soup: BeautifulSoup):
         self.match_scraper.scrap_commands_name(soup=soup)
-        self.match_scraper.get_count_of_games_and_name_with_last_trainer(soup=soup)
-        self.match_scraper.scrap_match_table_data(soup=soup)
+        try:
+            self.match_scraper.get_count_of_games_and_name_with_last_trainer(soup=soup)
+            self.match_scraper.scrap_match_table_data(soup=soup)
 
-        for button in self.statistic_buttons[1:10]:
-            button.click()
-            sleep(1)
+            for button in self.statistic_buttons[1:10]:
+                button.click()
+                sleep(1)
 
-            self.update_button.click()
-            sleep(1)
+                self.update_button.click()
+                sleep(1)
 
-            new_soup = BeautifulSoup(self.browser.get_html, 'lxml')
-            self.match_scraper.scrap_match_table_data(soup=new_soup)
+                new_soup = BeautifulSoup(self.browser.get_html, 'lxml')
+                self.match_scraper.scrap_match_table_data(soup=new_soup)
+
+            return True
+
+        except IndexError:
+            return None

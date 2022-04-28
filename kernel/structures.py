@@ -79,7 +79,7 @@ class AwayDataStructure:
         # last12 away games
         self.last_12_games_total_current_away_command_by_year_in_away_games = list()
         self.last_12_games_individual_total_current_away_by_year_in_away_games = list()
-        self.last_12_games_individual_total_opposing_teams_current_away_by_year_in_away_games = list()
+        self.last_12_games_individual_total_opposing_teams_current_away_by_year_in_home_games = list()
 
         # last8 home-away games
         self.last_8_games_total_current_away_by_year_in_home_away_games = None
@@ -107,7 +107,7 @@ class AwayDataStructure:
         print('last12 home games')
         print(self.last_12_games_total_current_away_command_by_year_in_away_games)
         print(self.last_12_games_individual_total_current_away_by_year_in_away_games)
-        print(self.last_12_games_individual_total_opposing_teams_current_away_by_year_in_away_games)
+        print(self.last_12_games_individual_total_opposing_teams_current_away_by_year_in_home_games)
 
 
 class FromDictToStructure:
@@ -133,156 +133,147 @@ class FromDictToStructure:
         elif home_away_collection == 'away_collections':
             self.away_structure = AwayDataStructure()
 
-        if statistic_name == 'Угловые':
-            for match in big_match_data[statistic_name][home_away_collection]:
-                if main_command_name in match['home_command'] or \
-                        main_command_name in match['away_command']:
-                    try:
-                        ind_home_total = int(match["home_command_individual_total"])
-                        ind_away_total = int(match["away_command_individual_total"])
-                        total = ind_home_total + ind_away_total
+        for match in big_match_data[statistic_name][home_away_collection]:
+            if main_command_name in match['home_command'] or \
+                    main_command_name in match['away_command']:
+                try:
+                    ind_home_total = int(match["home_command_individual_total"])
+                    ind_away_total = int(match["away_command_individual_total"])
+                    total = ind_home_total + ind_away_total
 
-                        if home_away_collection == 'home_collections':
-                            self.home_structure.big_data_total_current_home_in_home_away_games.append(total)
-                            if main_command_name in match['home_command']:
-                                self.home_structure.big_data_individual_total_current_home_in_home_away_games.append(
-                                    ind_home_total)
-                                self.home_structure.big_data_individual_total_opposing_teams_current_home_in_home_away_games.append(
-                                    ind_away_total)
+                except ValueError:
+                    continue
 
-                                away_command_name = self.clear_command_name(match['away_command'])
-                                for command in similar_away_commands_list:
-                                    if away_command_name in command:
-                                        self.home_structure.similar_command_total_current_home_big_data_home_away_games.append(
-                                            total)
-                                        self.home_structure.similar_command_individual_total_current_home_command_in_home_away_games.append(
-                                            ind_home_total)
-                                        self.home_structure.similar_command_individual_total_opposing_teams_current_home_in_home_away_games.append(
-                                            ind_away_total)
+                if home_away_collection == 'home_collections':
+                    self.home_structure.big_data_total_current_home_in_home_away_games.append(total)
+                    if main_command_name in match['home_command']:
+                        self.home_structure.big_data_individual_total_current_home_in_home_away_games.append(
+                            ind_home_total)
+                        self.home_structure.big_data_individual_total_opposing_teams_current_home_in_home_away_games.append(
+                            ind_away_total)
 
-
-                            elif main_command_name in match['away_command']:
-                                self.home_structure.big_data_individual_total_current_home_in_home_away_games.append(
-                                    ind_away_total)
-                                self.home_structure.big_data_individual_total_opposing_teams_current_home_in_home_away_games.append(
-                                    ind_home_total)
-
-                                home_command_name = self.clear_command_name(match['home_command'])
-                                for command in similar_away_commands_list:
-                                    if home_command_name in command:
-                                        self.home_structure.similar_command_total_current_home_big_data_home_away_games.append(
-                                            total)
-                                        self.home_structure.similar_command_individual_total_current_home_command_in_home_away_games.append(
-                                            ind_away_total)
-                                        self.home_structure.similar_command_individual_total_opposing_teams_current_home_in_home_away_games.append(
-                                            ind_home_total)
-
-
-                        elif home_away_collection == 'away_collections':
-                            self.away_structure.big_data_total_current_away_in_home_away_games.append(total)
-                            if main_command_name in match['home_command']:
-                                self.away_structure.big_data_individual_total_current_away_in_home_away_games.append(
-                                    ind_home_total)
-                                self.away_structure.big_data_individual_total_opposing_teams_current_away_in_home_away_games.append(
-                                    ind_away_total)
-
-                                away_command_name = self.clear_command_name(match['away_command'])
-                                for command in similar_home_commands_list:
-                                    if away_command_name in command:
-                                        self.away_structure.similar_command_total_current_away_big_data_home_away_games.append(
-                                            total)
-                                        self.away_structure.similar_command_individual_total_current_away_command_in_home_away_games.append(
-                                            ind_home_total)
-                                        self.away_structure.similar_command_individual_total_opposing_teams_current_away_in_home_away_games.append(
-                                            ind_away_total)
-
-
-                            elif main_command_name in match['away_command']:
-                                self.away_structure.big_data_individual_total_current_away_in_home_away_games.append(
-                                    ind_away_total)
-                                self.away_structure.big_data_individual_total_opposing_teams_current_away_in_home_away_games.append(
-                                    ind_home_total)
-
-                                home_command_name = self.clear_command_name(match['home_command'])
-                                for command in similar_home_commands_list:
-                                    if home_command_name in command:
-                                        self.away_structure.similar_command_total_current_away_big_data_home_away_games.append(
-                                            total)
-                                        self.away_structure.similar_command_individual_total_current_away_command_in_home_away_games.append(
-                                            ind_away_total)
-                                        self.away_structure.similar_command_individual_total_opposing_teams_current_away_in_home_away_games.append(
-                                            ind_home_total)
-
-                    except (KeyError, TypeError) as err:
-                        print(err)
-                        continue
-
-                    except Exception as err:
-                        print(err)
-                        continue
-
-            for match in last_year_data[statistic_name][home_away_collection]:
-                if main_command_name in match['home_command'] or \
-                        main_command_name in match['away_command']:
-                    try:
-                        ind_home_total = int(match["home_command_individual_total"])
-                        ind_away_total = int(match["away_command_individual_total"])
-                        total = ind_home_total + ind_away_total
-
-                        if home_away_collection == 'home_collections':
-                            self.home_structure.last_year_total_current_home_command_in_home_away_games.append(total)
-                        elif home_away_collection == 'away_collections':
-                            self.away_structure.last_year_total_current_away_command_in_home_away_games.append(total)
-
-                        if main_command_name in match['home_command']:
-                            if home_away_collection == 'home_collections':
-                                self.home_structure.last_year_individual_total_current_home_command_in_home_away_games.append(
-                                    ind_home_total)
-                                self.home_structure.last_year_individual_total_opposing_teams_current_home_in_home_away_games.append(
-                                    ind_away_total)
-
-                                self.home_structure.last_12_games_total_current_home_command_by_year_in_home_games.append(
+                        away_command_name = self.clear_command_name(match['away_command'])
+                        for command in similar_away_commands_list:
+                            if away_command_name in command:
+                                self.home_structure.similar_command_total_current_home_big_data_home_away_games.append(
                                     total)
-                                self.home_structure.last_12_games_individual_total_current_home_by_year_in_home_games.append(
+                                self.home_structure.similar_command_individual_total_current_home_command_in_home_away_games.append(
                                     ind_home_total)
-                                self.home_structure.last_12_games_individual_total_opposing_teams_current_home_by_year_in_away_games.append(
+                                self.home_structure.similar_command_individual_total_opposing_teams_current_home_in_home_away_games.append(
                                     ind_away_total)
 
 
-                            elif home_away_collection == 'away_collections':
-                                self.away_structure.last_year_individual_total_current_away_command_in_home_away_games.append(
-                                    ind_home_total)
-                                self.away_structure.last_year_individual_total_opposing_teams_current_away_in_home_away_games.append(
-                                    ind_away_total)
+                    elif main_command_name in match['away_command']:
+                        self.home_structure.big_data_individual_total_current_home_in_home_away_games.append(
+                            ind_away_total)
+                        self.home_structure.big_data_individual_total_opposing_teams_current_home_in_home_away_games.append(
+                            ind_home_total)
 
-
-
-                        elif main_command_name in match['away_command']:
-                            if home_away_collection == 'home_collections':
-                                self.home_structure.last_year_individual_total_current_home_command_in_home_away_games.append(
-                                    ind_away_total)
-                                self.home_structure.last_year_individual_total_opposing_teams_current_home_in_home_away_games.append(
-                                    ind_home_total)
-                            elif home_away_collection == 'away_collections':
-                                self.away_structure.last_year_individual_total_current_away_command_in_home_away_games.append(
-                                    ind_away_total)
-                                self.away_structure.last_year_individual_total_opposing_teams_current_away_in_home_away_games.append(
-                                    ind_home_total)
-
-                                self.away_structure.last_12_games_total_current_away_command_by_year_in_away_games.append(
+                        home_command_name = self.clear_command_name(match['home_command'])
+                        for command in similar_away_commands_list:
+                            if home_command_name in command:
+                                self.home_structure.similar_command_total_current_home_big_data_home_away_games.append(
                                     total)
-                                self.away_structure.last_12_games_individual_total_current_away_by_year_in_away_games.append(
+                                self.home_structure.similar_command_individual_total_current_home_command_in_home_away_games.append(
                                     ind_away_total)
-                                self.away_structure.last_12_games_individual_total_opposing_teams_current_away_by_year_in_away_games.append(
+                                self.home_structure.similar_command_individual_total_opposing_teams_current_home_in_home_away_games.append(
                                     ind_home_total)
 
-                    except (KeyError, TypeError) as err:
-                        print(err)
-                        continue
 
-                    except Exception as err:
-                        print(err)
-                        continue
+                elif home_away_collection == 'away_collections':
+                    self.away_structure.big_data_total_current_away_in_home_away_games.append(total)
+                    if main_command_name in match['home_command']:
+                        self.away_structure.big_data_individual_total_current_away_in_home_away_games.append(
+                            ind_home_total)
+                        self.away_structure.big_data_individual_total_opposing_teams_current_away_in_home_away_games.append(
+                            ind_away_total)
+
+                        away_command_name = self.clear_command_name(match['away_command'])
+                        for command in similar_home_commands_list:
+                            if away_command_name in command:
+                                self.away_structure.similar_command_total_current_away_big_data_home_away_games.append(
+                                    total)
+                                self.away_structure.similar_command_individual_total_current_away_command_in_home_away_games.append(
+                                    ind_home_total)
+                                self.away_structure.similar_command_individual_total_opposing_teams_current_away_in_home_away_games.append(
+                                    ind_away_total)
+
+
+                    elif main_command_name in match['away_command']:
+                        self.away_structure.big_data_individual_total_current_away_in_home_away_games.append(
+                            ind_away_total)
+                        self.away_structure.big_data_individual_total_opposing_teams_current_away_in_home_away_games.append(
+                            ind_home_total)
+
+                        home_command_name = self.clear_command_name(match['home_command'])
+                        for command in similar_home_commands_list:
+                            if home_command_name in command:
+                                self.away_structure.similar_command_total_current_away_big_data_home_away_games.append(
+                                    total)
+                                self.away_structure.similar_command_individual_total_current_away_command_in_home_away_games.append(
+                                    ind_away_total)
+                                self.away_structure.similar_command_individual_total_opposing_teams_current_away_in_home_away_games.append(
+                                    ind_home_total)
+
+        for match in last_year_data[statistic_name][home_away_collection]:
+            if main_command_name in match['home_command'] or \
+                    main_command_name in match['away_command']:
+                try:
+                    ind_home_total = int(match["home_command_individual_total"])
+                    ind_away_total = int(match["away_command_individual_total"])
+                    total = ind_home_total + ind_away_total
+
+                except ValueError:
+                    continue
+
+                if home_away_collection == 'home_collections':
+                    self.home_structure.last_year_total_current_home_command_in_home_away_games.append(total)
+                elif home_away_collection == 'away_collections':
+                    self.away_structure.last_year_total_current_away_command_in_home_away_games.append(total)
+
+                if main_command_name in match['home_command']:
+                    if home_away_collection == 'home_collections':
+                        self.home_structure.last_year_individual_total_current_home_command_in_home_away_games.append(
+                            ind_home_total)
+                        self.home_structure.last_year_individual_total_opposing_teams_current_home_in_home_away_games.append(
+                            ind_away_total)
+
+                        self.home_structure.last_12_games_total_current_home_command_by_year_in_home_games.append(
+                            total)
+                        self.home_structure.last_12_games_individual_total_current_home_by_year_in_home_games.append(
+                            ind_home_total)
+                        self.home_structure.last_12_games_individual_total_opposing_teams_current_home_by_year_in_away_games.append(
+                            ind_away_total)
+
+
+                    elif home_away_collection == 'away_collections':
+                        self.away_structure.last_year_individual_total_current_away_command_in_home_away_games.append(
+                            ind_home_total)
+                        self.away_structure.last_year_individual_total_opposing_teams_current_away_in_home_away_games.append(
+                            ind_away_total)
+
+
+
+                elif main_command_name in match['away_command']:
+                    if home_away_collection == 'home_collections':
+                        self.home_structure.last_year_individual_total_current_home_command_in_home_away_games.append(
+                            ind_away_total)
+                        self.home_structure.last_year_individual_total_opposing_teams_current_home_in_home_away_games.append(
+                            ind_home_total)
+                    elif home_away_collection == 'away_collections':
+                        self.away_structure.last_year_individual_total_current_away_command_in_home_away_games.append(
+                            ind_away_total)
+                        self.away_structure.last_year_individual_total_opposing_teams_current_away_in_home_away_games.append(
+                            ind_home_total)
+
+                        self.away_structure.last_12_games_total_current_away_command_by_year_in_away_games.append(
+                            total)
+                        self.away_structure.last_12_games_individual_total_current_away_by_year_in_away_games.append(
+                            ind_away_total)
+                        self.away_structure.last_12_games_individual_total_opposing_teams_current_away_by_year_in_home_games.append(
+                            ind_home_total)
+
+
 
         if home_away_collection == 'home_collections':
             return self.home_structure
