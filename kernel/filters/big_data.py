@@ -76,7 +76,7 @@ class MatchDataNormalize:
         except AttributeError:
             match = re.search('\d{2}', self.season)
             if match:
-                year_or_years = '20' + match
+                year_or_years = '20' + match.group()
                 return f'{self.day_month}.{year_or_years}'
 
     def determine_the_year_by_the_month_of_the_season(self,

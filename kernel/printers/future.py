@@ -11,7 +11,8 @@ class BetPrinter:
                  last_4_percent: float,
                  coeff_total: float,
                  coeff_value: float,
-                 rate_direction: str):
+                 rate_direction: str,
+                 category: str):
 
         self.statistic_name = statistic_name
         self.big_data_percent = big_data_percent
@@ -26,14 +27,16 @@ class BetPrinter:
         self.coeff_total = coeff_total
         self.coeff_value = coeff_value
         self.rate_direction = rate_direction
+        self.category = category
 
 
     def print_rate(self):
         print(f"""
-        Football match: {self.big_match_data['home_command_name']} - {self.big_match_data['away_command_name']} 
+        Football match: {self.big_match_data['home_command_name']} - {self.big_match_data['away_command_name']}
+        Category:_____________________ {self.category}
         
         Statistic Name:_______________ {self.statistic_name}
-        Rate Type:____________________ {'Part for combine rate'  if float(self.coeff_value) < 87 else 'Single rate'}
+        Rate Type:____________________ {'Part for combine rate'  if float(self.coeff_value) < 1.683 else 'Single rate'}
         Bet:__________________________ {self.coeff_total} {self.rate_direction}  
         Coefficient:__________________ {self.coeff_value}
 

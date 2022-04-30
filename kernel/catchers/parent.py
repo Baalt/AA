@@ -125,34 +125,6 @@ class Catcher:
         else:
             last_4_percent = None
 
-        # pass
-
-        # last_20_percent = (last_20_current_percent + last_20_opposing_percent) / 2
-        # last_12_percent = (last_12_current_percent + last_12_opposing_percent) / 2
-        # last_8_percent = (last_8_current_percent + last_8_opposing_percent) / 2
-        # last_4_percent = (last_4_current_percent + last_4_opposing_percent) / 2
-        # big_data_percent = (big_data_current_percent + big_data_opposing_percent) / 2
-        # last_year_percent = (last_year_current_percent + last_year_opposing_percent) / 2
-        # similar_percent = (similar_current_percent + similar_opposing_percent) / 2
-        # print('Big Data', big_data_percent, big_data_current_percent, big_data_opposing_percent)
-        # print('Last Year', last_year_percent, last_year_current_percent, last_year_opposing_percent)
-        # print('Similar', similar_percent, similar_current_percent, similar_opposing_percent)
-        # print('last20', last_20_percent, last_20_current_percent, last_20_opposing_percent)
-        # print('last12', last_12_percent, last_12_current_percent, last_12_opposing_percent)
-        # print('last8', last_8_percent, last_8_current_percent, last_8_opposing_percent)
-        # print('last4', last_4_percent, last_4_current_percent, last_4_opposing_percent)
-        # BetPrinter(statistic_name=statistic_name,
-        #            big_data_percent=big_data_percent,
-        #            last_year_percent=last_year_percent,
-        #            similar_percent=similar_percent,
-        #            last_20_percent=last_20_percent,
-        #            last_12_percent=last_12_percent,
-        #            last_8_percent=last_8_percent,
-        #            last_4_percent=last_4_percent,
-        #            big_match_data=self.big_match_data,
-        #            coeff_total=coeff_set['total_number'],
-        #            coeff_value=coeff_set[coeff_under_over_key],
-        #            rate_direction=rate_direction).print_rate()
 
         if similar_percent and last_20_percent and last_12_percent and last_8_percent and last_4_percent:
             big_data_percent = (big_data_current_percent + big_data_opposing_percent) / 2
@@ -169,4 +141,53 @@ class Catcher:
                        big_match_data=self.big_match_data,
                        coeff_total=coeff_set['total_number'],
                        coeff_value=coeff_set[coeff_under_over_key],
-                       rate_direction=rate_direction).print_rate()
+                       rate_direction=rate_direction,
+                       category='A').print_rate()
+
+
+        else:
+
+            try:
+                last_20_percent = (last_20_current_percent + last_20_opposing_percent) / 2
+                last_12_percent = (last_12_current_percent + last_12_opposing_percent) / 2
+                last_8_percent = (last_8_current_percent + last_8_opposing_percent) / 2
+                last_4_percent = (last_4_current_percent + last_4_opposing_percent) / 2
+                similar_percent = (similar_current_percent + similar_opposing_percent) / 2
+            except Exception as err:
+                print(err)
+                similar_percent = None
+                last_20_percent = None
+                last_12_percent = None
+                last_8_percent = None
+                last_4_percent = None
+
+            if similar_percent and last_20_percent and last_12_percent and last_8_percent and last_4_percent:
+                if similar_percent >= ord_or_exp and last_20_percent >= ord_or_exp and last_12_percent > ord_or_exp:
+                    if last_8_percent > 87.4 and last_4_percent > 99:
+                        big_data_percent = (big_data_current_percent + big_data_opposing_percent) / 2
+                        last_year_percent = (last_year_current_percent + last_year_opposing_percent) / 2
+                        BetPrinter(statistic_name=statistic_name,
+                                   big_data_percent=big_data_percent,
+                                   last_year_percent=last_year_percent,
+                                   similar_percent=similar_percent,
+                                   last_20_percent=last_20_percent,
+                                   last_12_percent=last_12_percent,
+                                   last_8_percent=last_8_percent,
+                                   last_4_percent=last_4_percent,
+                                   big_match_data=self.big_match_data,
+                                   coeff_total=coeff_set['total_number'],
+                                   coeff_value=coeff_set[coeff_under_over_key],
+                                   rate_direction=rate_direction,
+                                   category='B').print_rate()
+
+
+            # print('Big Data', big_data_percent, big_data_current_percent, big_data_opposing_percent)
+            # print('Last Year', last_year_percent, last_year_current_percent, last_year_opposing_percent)
+            # print('Similar', similar_percent, similar_current_percent, similar_opposing_percent)
+            # print('last20', last_20_percent, last_20_current_percent, last_20_opposing_percent)
+            # print('last12', last_12_percent, last_12_current_percent, last_12_opposing_percent)
+            # print('last8', last_8_percent, last_8_current_percent, last_8_opposing_percent)
+            # print('last4', last_4_percent, last_4_current_percent, last_4_opposing_percent)
+
+
+
