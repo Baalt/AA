@@ -2,7 +2,7 @@ from kernel.catchers.parent import Catcher
 
 
 class HandicapCatcher(Catcher):
-    def search_handicap_1_rate(self, statistic_name: str):
+    def search_handicap_1_rate(self, statistic_name: str, league_name: str):
         for coeff_set in self.coefficients[self.statistic_name]['handicap_1_&coefficient']:
             big_data_current_percent = self.handicap_calculation(
                 coeff_set=coeff_set,
@@ -111,6 +111,7 @@ class HandicapCatcher(Catcher):
                     last_4_current_percent and last_4_opposing_percent:
                 if float(coeff_set['coefficient']) >= 1.683:
                     self.is_there_a_weak_point(statistic_name=statistic_name,
+                                               league_name=league_name,
                                                coeff_set=coeff_set,
                                                rate_direction='Handicap 1',
                                                coeff_under_over_key='coefficient',
@@ -132,6 +133,7 @@ class HandicapCatcher(Catcher):
 
                 if float(coeff_set['coefficient']) < 1.683:
                     self.is_there_a_weak_point(statistic_name=statistic_name,
+                                               league_name=league_name,
                                                coeff_set=coeff_set,
                                                rate_direction='Handicap 1',
                                                coeff_under_over_key='coefficient',
@@ -151,7 +153,7 @@ class HandicapCatcher(Catcher):
                                                last_4_current_percent=last_4_current_percent,
                                                last_4_opposing_percent=last_4_opposing_percent)
 
-    def search_handicap_2_rate(self, statistic_name: str):
+    def search_handicap_2_rate(self, statistic_name: str, league_name: str):
         for coeff_set in self.coefficients[self.statistic_name]['handicap_2_&coefficient']:
             big_data_current_percent = self.handicap_calculation(
                 coeff_set=coeff_set,
@@ -261,6 +263,7 @@ class HandicapCatcher(Catcher):
 
                 if float(coeff_set['coefficient']) >= 1.683:
                     self.is_there_a_weak_point(statistic_name=statistic_name,
+                                               league_name=league_name,
                                                coeff_set=coeff_set,
                                                rate_direction='Handicap 2',
                                                coeff_under_over_key='coefficient',
@@ -282,6 +285,7 @@ class HandicapCatcher(Catcher):
 
                 if float(coeff_set['coefficient']) < 1.683:
                     self.is_there_a_weak_point(statistic_name=statistic_name,
+                                               league_name=league_name,
                                                coeff_set=coeff_set,
                                                rate_direction='Handicap 2',
                                                coeff_under_over_key='coefficient',

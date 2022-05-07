@@ -2,7 +2,7 @@ from kernel.catchers.parent import Catcher
 
 
 class TotalCatcher(Catcher):
-    def search_total_rate(self, statistic_name: str):
+    def search_total_rate(self, statistic_name: str, league_name: str):
         for coeff_set in self.coefficients[self.statistic_name]['total&coefficient']:
             big_data_home_result = \
                 self.total_calculation(coeff_set=coeff_set,
@@ -92,6 +92,7 @@ class TotalCatcher(Catcher):
                 if big_data_home_under_percent and big_data_away_under_percent and \
                         float(coeff_set['coefficient_under']) >= 1.683:
                     self.is_there_a_weak_point(statistic_name=statistic_name,
+                                               league_name=league_name,
                                                coeff_set=coeff_set,
                                                rate_direction='Total Under',
                                                coeff_under_over_key='coefficient_under',
@@ -114,6 +115,7 @@ class TotalCatcher(Catcher):
                 if big_data_home_under_percent and big_data_away_under_percent and \
                         float(coeff_set['coefficient_under']) < 1.683:
                     self.is_there_a_weak_point(statistic_name=statistic_name,
+                                               league_name=league_name,
                                                coeff_set=coeff_set,
                                                rate_direction='Total Under',
                                                coeff_under_over_key='coefficient_under',
@@ -136,6 +138,7 @@ class TotalCatcher(Catcher):
                 if big_data_home_over_percent and big_data_away_over_percent and \
                         float(coeff_set['coefficient_over']) >= 1.683:
                     self.is_there_a_weak_point(statistic_name=statistic_name,
+                                               league_name=league_name,
                                                coeff_set=coeff_set,
                                                rate_direction='Total Over',
                                                coeff_under_over_key='coefficient_over',
@@ -158,6 +161,7 @@ class TotalCatcher(Catcher):
                 if big_data_home_over_percent and big_data_away_over_percent and \
                         float(coeff_set['coefficient_over']) < 1.683:
                     self.is_there_a_weak_point(statistic_name=statistic_name,
+                                               league_name=league_name,
                                                coeff_set=coeff_set,
                                                rate_direction='Total Over',
                                                coeff_under_over_key='coefficient_over',

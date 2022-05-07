@@ -151,8 +151,6 @@ class ValidStructureFilter:
                             self.home_structure.last_12_games_total_current_home_command_by_year_in_home_games) >= 12 and \
                             len(self.home_structure.similar_command_total_current_home_big_data_home_away_games) > 8:
                         return True
-                    return False
-            return False
         return False
 
     def is_away_structure_valid(self):
@@ -169,6 +167,4 @@ class ValidStructureFilter:
                             self.away_structure.last_12_games_total_current_away_command_by_year_in_away_games) >= 12 and \
                             len(self.away_structure.similar_command_total_current_away_big_data_home_away_games) > 8:
                         return True
-                    return False
-                return False
         return False

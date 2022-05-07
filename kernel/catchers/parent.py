@@ -16,7 +16,7 @@ class Catcher:
         self.coefficients = coefficients
         self.statistic_name = statistic_name
 
-    def total_calculation(self, coeff_set, seq):
+    def total_calculation(self, coeff_set, seq: list):
         over_list = []
         under_list = []
         under_percent, over_percent = None, None
@@ -48,7 +48,7 @@ class Catcher:
             print('rate_search Error: ', err)
             return None
 
-    def handicap_calculation(self, coeff_set, current_seq, opposing_seq):
+    def handicap_calculation(self, coeff_set, current_seq: list, opposing_seq: list):
         if len(current_seq) == len(opposing_seq):
             win_list = []
             lose_list = []
@@ -57,8 +57,11 @@ class Catcher:
                 coeff_total = float(coeff_set['total_number'])
                 coefficient = float(coeff_set['coefficient'])
 
+                idx = 0
                 for total in current_seq:
-                    total_plus_handicap = (total + coeff_total) - opposing_seq[current_seq.index(total)]
+                    total_plus_handicap = (total + coeff_total) - opposing_seq[idx] #current_seq.index(total)
+                    idx += 1
+                    # list_handicap.append(total_plus_handicap)
                     if total_plus_handicap > 0:
                         win_list.append(total)
                     elif total_plus_handicap < 0:
@@ -67,11 +70,18 @@ class Catcher:
                 count_win = len(win_list)
                 count_lose = len(lose_list)
 
+
                 if coefficient >= 1.29:
                     win_percent = (count_win * 100) / (count_win + count_lose)
 
-                # print(len(current_seq), len(opposing_seq))
-                # print(current_seq, opposing_seq)
+                # print('Тотал и коэфф', coeff_total, coefficient)
+                # print('кол-во игр', len(current_seq), len(opposing_seq))
+                # print(list_handicap)
+                # print(win_list)
+                # print(lose_list)
+                # print(count_win, count_lose)
+                # print('Процент победы', win_percent)
+
                 return win_percent
 
             except Exception as err:
@@ -81,6 +91,7 @@ class Catcher:
 
     def is_there_a_weak_point(self,
                               statistic_name: str,
+                              league_name: str,
                               coeff_set: dict,
                               rate_direction: str,
                               coeff_under_over_key: str,
@@ -131,6 +142,7 @@ class Catcher:
             last_year_percent = (last_year_current_percent + last_year_opposing_percent) / 2
 
             BetPrinter(statistic_name=statistic_name,
+                       league_name=league_name,
                        big_data_percent=big_data_percent,
                        last_year_percent=last_year_percent,
                        similar_percent=similar_percent,
@@ -167,6 +179,7 @@ class Catcher:
                         big_data_percent = (big_data_current_percent + big_data_opposing_percent) / 2
                         last_year_percent = (last_year_current_percent + last_year_opposing_percent) / 2
                         BetPrinter(statistic_name=statistic_name,
+                                   league_name=league_name,
                                    big_data_percent=big_data_percent,
                                    last_year_percent=last_year_percent,
                                    similar_percent=similar_percent,

@@ -11,9 +11,9 @@ from browser.managers.coefficients import CoefficientManager
 from kernel.filters.big_data import LastYearFilter
 from kernel.filters.valid import ValidStructureFilter
 from kernel.structures import FromDictToStructure
-from kernel.catchers.handicap import HandicapCatcher
 from kernel.catchers.total import TotalCatcher
 from kernel.catchers.total_individual import IndividualTotalCatcher
+from kernel.catchers.handicap import HandicapCatcher
 
 
 class CompareStructureWithCoefficients(TotalCatcher,
@@ -21,23 +21,23 @@ class CompareStructureWithCoefficients(TotalCatcher,
                                        HandicapCatcher):
     def search(self, statistic_name: str):
         # print('Ищу total')
-        self.search_total_rate(statistic_name=statistic_name)
+        self.search_total_rate(statistic_name=statistic_name, league_name=full_league_name)
         # print('Поиск total окончен')
         # print()
         # print('Ищу инд total1')
-        self.search_individual_1_total_rate(statistic_name=statistic_name)
+        self.search_individual_1_total_rate(statistic_name=statistic_name, league_name=full_league_name)
         # print('Поиск ind total1 окончен')
         # print()
         # print('Ищу инд total2')
-        self.search_individual_2_total_rate(statistic_name=statistic_name)
+        self.search_individual_2_total_rate(statistic_name=statistic_name, league_name=full_league_name)
         # print('Поиск ind total2 окончен')
         # print()
         # print('Ищу handicap1')
-        self.search_handicap_1_rate(statistic_name=statistic_name)
+        self.search_handicap_1_rate(statistic_name=statistic_name, league_name=full_league_name)
         # print('Поиск handicap1 окончен')
         # print()
         # print('Поиск handicap2')
-        self.search_handicap_2_rate(statistic_name=statistic_name)
+        self.search_handicap_2_rate(statistic_name=statistic_name, league_name=full_league_name)
         # print('Поиск handicap2 окончен')
 
 
@@ -45,11 +45,13 @@ class MathCore:
     def __init__(self, big_match_data: dict,
                  last_year_data: dict,
                  coefficients_data: dict,
-                 all_league_data: dict):
+                 all_league_data: dict,
+                 league_name: str):
         self.big_match_data = big_match_data
         self.last_year_data = last_year_data
         self.coefficients_data = coefficients_data
         self.league_data = all_league_data
+        self.league_name = league_name
 
 
 class FromHistoryToRate(MathCore, FromDictToStructure):
@@ -62,7 +64,8 @@ class FromHistoryToRate(MathCore, FromDictToStructure):
         current_away_position = None
         similar_home_commands_list = []
         similar_away_commands_list = []
-
+        self.similar_home_commands_list = None
+        self.similar_away_commands_list = None
         try:
             for command in self.league_data[statistic_name]:
                 if main_home_command_name in command:
@@ -96,48 +99,53 @@ class FromHistoryToRate(MathCore, FromDictToStructure):
         main_away_command_name = self.big_match_data['away_command_name']
         for statistic_name in self.big_match_data:
             if not statistic_name.startswith('home') and not statistic_name.startswith('away'):
-                self.add_similar_commands_in_list(statistic_name=statistic_name,
-                                                  main_home_command_name=main_home_command_name,
-                                                  main_away_command_name=main_away_command_name)
+                try:
+                    self.add_similar_commands_in_list(statistic_name=statistic_name,
+                                                      main_home_command_name=main_home_command_name,
+                                                      main_away_command_name=main_away_command_name)
 
-                if self.similar_home_commands_list and self.similar_away_commands_list:
+                    if self.similar_home_commands_list and self.similar_away_commands_list:
 
-                    home_structure = self.convert(big_match_data=self.big_match_data,
-                                                  last_year_data=self.last_year_data,
-                                                  statistic_name=statistic_name,
-                                                  main_command_name=main_home_command_name,
-                                                  home_away_collection='home_collections',
-                                                  similar_home_commands_list=self.similar_home_commands_list,
-                                                  similar_away_commands_list=self.similar_away_commands_list)
+                        home_structure = self.convert(big_match_data=self.big_match_data,
+                                                      last_year_data=self.last_year_data,
+                                                      statistic_name=statistic_name,
+                                                      main_command_name=main_home_command_name,
+                                                      home_away_collection='home_collections',
+                                                      similar_home_commands_list=self.similar_home_commands_list,
+                                                      similar_away_commands_list=self.similar_away_commands_list)
 
-                    away_structure = self.convert(big_match_data=self.big_match_data,
-                                                  last_year_data=self.last_year_data,
-                                                  statistic_name=statistic_name,
-                                                  main_command_name=main_away_command_name,
-                                                  home_away_collection='away_collections',
-                                                  similar_home_commands_list=self.similar_home_commands_list,
-                                                  similar_away_commands_list=self.similar_away_commands_list)
+                        away_structure = self.convert(big_match_data=self.big_match_data,
+                                                      last_year_data=self.last_year_data,
+                                                      statistic_name=statistic_name,
+                                                      main_command_name=main_away_command_name,
+                                                      home_away_collection='away_collections',
+                                                      similar_home_commands_list=self.similar_home_commands_list,
+                                                      similar_away_commands_list=self.similar_away_commands_list)
 
-                    try:
-                        structures = ValidStructureFilter(home_structure=home_structure,
-                                                          away_structure=away_structure)
-                        structures.valid_and_create()
-                        if structures.is_home_structure_valid() and structures.is_away_structure_valid():
-                            if self.coefficients_data:
-                                compare = CompareStructureWithCoefficients(home_structure=structures.home_structure,
-                                                                           away_structure=structures.away_structure,
-                                                                           big_match_data=self.big_match_data,
-                                                                           coefficients=self.coefficients_data,
-                                                                           statistic_name=statistic_name)
-                                compare.search(statistic_name=statistic_name)
+                        try:
+                            structures = ValidStructureFilter(home_structure=home_structure,
+                                                              away_structure=away_structure)
+                            structures.valid_and_create()
+                            if structures.is_home_structure_valid() and structures.is_away_structure_valid():
+                                if self.coefficients_data:
+                                    compare = CompareStructureWithCoefficients(home_structure=structures.home_structure,
+                                                                               away_structure=structures.away_structure,
+                                                                               big_match_data=self.big_match_data,
+                                                                               coefficients=self.coefficients_data,
+                                                                               statistic_name=statistic_name)
+                                    compare.search(statistic_name=statistic_name)
 
-                    except KeyError as err:
-                        print('FromHistoryToRate.run.ERROR: ', err)
+                        except KeyError as err:
+                            print('FromHistoryToRate.run.ERROR: ', err)
+                            continue
+
+                        except TypeError as err:
+                            print('FromHistoryToRate.run.ERROR: ', err)
                         continue
 
-                    except TypeError as err:
-                        print('FromHistoryToRate.run.ERROR: ', err)
-                        continue
+                except AttributeError as err:
+                    print('FromHistoryToRate.run.ERROR: ', err)
+                    continue
 
 
 if __name__ == '__main__':
@@ -167,16 +175,32 @@ if __name__ == '__main__':
 
                     soup = BeautifulSoup(browser.get_html, 'lxml')
                     is_match_data = match_manager.get_match_data(soup=soup)
+
+                    if is_match_data:
+                        sleep(1)
+                        copy_match_data = copy.deepcopy(match_manager.get_data)
+
+                        coeff_manager = CoefficientManager(browser=browser)
+                        coeff_manager.get_coefficients_data()
+                        sleep(1)
+
+                        last_year_data = LastYearFilter(all_match_data=copy_match_data, all_referee_data=None)
+                        last_year_data.filter_home_away_collections('home_collections')
+                        last_year_data.filter_home_away_collections('away_collections')
+                        # last_year_data.filter_referee_collections()
+
+                        math_collector = FromHistoryToRate(big_match_data=match_manager.get_data,
+                                                           last_year_data=last_year_data.all_match_data,
+                                                           coefficients_data=coeff_manager.get_data,
+                                                           all_league_data=all_league_data,
+                                                           league_name=full_league_name)
+                        math_collector.run()
+
                 except NoSuchElementException:
                     continue
 
-                if is_match_data:
-                    sleep(1)
-                    copy_match_data = copy.deepcopy(match_manager.get_data)
-
-                    coeff_manager = CoefficientManager(browser=browser)
-                    coeff_manager.get_coefficients_data()
-                    sleep(1)
+                except AttributeError:
+                    continue
 
                     # referee = RefereeManager(browser=browser, league='Serie A')
                     # try:
@@ -186,14 +210,3 @@ if __name__ == '__main__':
                     #
                     # except Exception:
                     #     copy_referee_data = None
-
-                    last_year_data = LastYearFilter(all_match_data=copy_match_data, all_referee_data=None)
-                    last_year_data.filter_home_away_collections('home_collections')
-                    last_year_data.filter_home_away_collections('away_collections')
-                    # last_year_data.filter_referee_collections()
-
-                    math_collector = FromHistoryToRate(big_match_data=match_manager.get_data,
-                                                       last_year_data=last_year_data.all_match_data,
-                                                       coefficients_data=coeff_manager.get_data,
-                                                       all_league_data=all_league_data)
-                    math_collector.run()

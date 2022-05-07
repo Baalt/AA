@@ -32,6 +32,11 @@ class MatchButtons(Button):
         return season_home_button_all, season_away_button_all
 
     def current_league_command_buttons(self, league: str):
+        if 'profesional' in league.lower():
+            button_league = league.split()
+            if len(button_league) > 2:
+                league = button_league[0].strip() + ' ' + button_league[1].strip()
+
         CURRENT_HOME_LEAGUE_XPATH = f'(//div[@id="refCompetitions"])[1]' \
                                     f'/button[normalize-space(text())=\'{league}\']'
         CURRENT_AWAY_LEAGUE_XPATH = f'(//div[@id="refCompetitions"])[2]' \
