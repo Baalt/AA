@@ -32,22 +32,39 @@ class MatchButtons(Button):
         return season_home_button_all, season_away_button_all
 
     def current_league_command_buttons(self, league: str):
-        if 'profesional' in league.lower():
-            button_league = league.split()
-            if len(button_league) > 2:
-                league = button_league[0].strip() + ' ' + button_league[1].strip()
+        try:
+            CURRENT_HOME_LEAGUE_XPATH = f'(//div[@id="refCompetitions"])[1]' \
+                                        f'/button[normalize-space(text())=\'{league}\']'
+            CURRENT_AWAY_LEAGUE_XPATH = f'(//div[@id="refCompetitions"])[2]' \
+                                        f'/button[normalize-space(text())=\'{league}\']'
 
-        CURRENT_HOME_LEAGUE_XPATH = f'(//div[@id="refCompetitions"])[1]' \
-                                    f'/button[normalize-space(text())=\'{league}\']'
-        CURRENT_AWAY_LEAGUE_XPATH = f'(//div[@id="refCompetitions"])[2]' \
-                                    f'/button[normalize-space(text())=\'{league}\']'
+            current_league_home_command_button = self.browser.firefox.find_element(By.XPATH,
+                                                                                   value=CURRENT_HOME_LEAGUE_XPATH)
+            current_league_away_command_button = self.browser.firefox.find_element(By.XPATH,
+                                                                                   value=CURRENT_AWAY_LEAGUE_XPATH)
 
-        current_league_home_command_button = self.browser.firefox.find_element(By.XPATH,
-                                                                               value=CURRENT_HOME_LEAGUE_XPATH)
-        current_league_away_command_button = self.browser.firefox.find_element(By.XPATH,
-                                                                               value=CURRENT_AWAY_LEAGUE_XPATH)
+            return current_league_home_command_button, current_league_away_command_button
 
-        return current_league_home_command_button, current_league_away_command_button
+        except:
+            try:
+                button_league = league.split()
+                if len(button_league) > 1:
+                    league = button_league[0].strip() + ' ' + button_league[1].strip()
+
+                CURRENT_HOME_LEAGUE_XPATH = f'(//div[@id="refCompetitions"])[1]' \
+                                            f'/button[normalize-space(text())=\'{league}\']'
+                CURRENT_AWAY_LEAGUE_XPATH = f'(//div[@id="refCompetitions"])[2]' \
+                                            f'/button[normalize-space(text())=\'{league}\']'
+
+                current_league_home_command_button = self.browser.firefox.find_element(By.XPATH,
+                                                                                       value=CURRENT_HOME_LEAGUE_XPATH)
+                current_league_away_command_button = self.browser.firefox.find_element(By.XPATH,
+                                                                                       value=CURRENT_AWAY_LEAGUE_XPATH)
+
+                return current_league_home_command_button, current_league_away_command_button
+
+            except:
+                raise AttributeError
 
     @property
     def open_coefficient_button(self):

@@ -1,7 +1,6 @@
 import copy
 from time import sleep
 from bs4 import BeautifulSoup
-from selenium.common.exceptions import NoSuchElementException
 
 from scraper.schedule import MatchScheduleScraper
 from browser.head import Browser
@@ -20,25 +19,11 @@ class CompareStructureWithCoefficients(TotalCatcher,
                                        IndividualTotalCatcher,
                                        HandicapCatcher):
     def search(self, statistic_name: str):
-        # print('Ищу total')
         self.search_total_rate(statistic_name=statistic_name, league_name=full_league_name)
-        # print('Поиск total окончен')
-        # print()
-        # print('Ищу инд total1')
         self.search_individual_1_total_rate(statistic_name=statistic_name, league_name=full_league_name)
-        # print('Поиск ind total1 окончен')
-        # print()
-        # print('Ищу инд total2')
         self.search_individual_2_total_rate(statistic_name=statistic_name, league_name=full_league_name)
-        # print('Поиск ind total2 окончен')
-        # print()
-        # print('Ищу handicap1')
         self.search_handicap_1_rate(statistic_name=statistic_name, league_name=full_league_name)
-        # print('Поиск handicap1 окончен')
-        # print()
-        # print('Поиск handicap2')
         self.search_handicap_2_rate(statistic_name=statistic_name, league_name=full_league_name)
-        # print('Поиск handicap2 окончен')
 
 
 class MathCore:
@@ -141,7 +126,7 @@ class FromHistoryToRate(MathCore, FromDictToStructure):
 
                         except TypeError as err:
                             print('FromHistoryToRate.run.ERROR: ', err)
-                        continue
+                            continue
 
                 except AttributeError as err:
                     print('FromHistoryToRate.run.ERROR: ', err)
@@ -152,9 +137,7 @@ if __name__ == '__main__':
     browser = Browser()
     browser.login()
     sleep(1)
-    # browser.open_new_page('/league/Europe/Champions_League')
-    # input('Remove ads if ads and chose the searching day then click "Enter":')
-
+    input('Choose the day and press "Enter".')
     soup = BeautifulSoup(browser.get_html, 'lxml')
     football_schedule_data: dict = MatchScheduleScraper().scrap_shedule_data(soup=soup)
     for full_league_name in football_schedule_data:
@@ -164,15 +147,18 @@ if __name__ == '__main__':
             sleep(1)
             soup = BeautifulSoup(browser.get_html, 'lxml')
             all_league_data = LeagueManager(browser=browser, soup=soup).get_data
-
             for match in football_schedule_data[full_league_name]['match_url']:
-                browser.open_new_page(match)
-                sleep(1)
-                match_manager = MatchManager(browser, league=league)
                 try:
-                    match_manager.filter_out(number_of_matches=100)
+                    browser.open_new_page(match)
                     sleep(1)
 
+                    try:
+                        match_manager = MatchManager(browser, league=league)
+                    except AttributeError:
+                        continue
+
+                    match_manager.filter_out(number_of_matches=100)
+                    sleep(1)
                     soup = BeautifulSoup(browser.get_html, 'lxml')
                     is_match_data = match_manager.get_match_data(soup=soup)
 
@@ -196,17 +182,17 @@ if __name__ == '__main__':
                                                            league_name=full_league_name)
                         math_collector.run()
 
-                except NoSuchElementException:
+                except Exception as err:
+                    print('MAIN_SCRIPT_ERROR: ', err)
                     continue
 
-                except AttributeError:
-                    continue
-
-                    # referee = RefereeManager(browser=browser, league='Serie A')
-                    # try:
-                    #     referee.get_referee_data()
-                    #     copy_referee_data = copy.deepcopy(referee.get_data) if referee.get_data else None
-                    #
-                    #
-                    # except Exception:
-                    #     copy_referee_data = None
+    print('Search is over.')
+    browser.close()
+        # referee = RefereeManager(browser=browser, league='Serie A')
+        # try:
+        #     referee.get_referee_data()
+        #     copy_referee_data = copy.deepcopy(referee.get_data) if referee.get_data else None
+        #
+        #
+        # except Exception:
+        #     copy_referee_data = None

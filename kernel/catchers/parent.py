@@ -1,4 +1,4 @@
-from kernel.printers.future import BetPrinter
+from kernel.printers.future import BetPrinter, TrainerPrinter
 from kernel.structures import HomeDataStructure, AwayDataStructure
 
 
@@ -155,6 +155,8 @@ class Catcher:
                        coeff_value=coeff_set[coeff_under_over_key],
                        rate_direction=rate_direction,
                        category='A').print_rate()
+
+            TrainerPrinter(big_match_data=self.big_match_data)
 
 
         else:

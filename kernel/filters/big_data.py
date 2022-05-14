@@ -83,7 +83,10 @@ class MatchDataNormalize:
                                                       first_half_season_year: str,
                                                       second_half_season_year: str):
         try:
+            if self.day_month == '29.02':
+                self.day_month = '28.02'
             match_date = datetime.strptime(self.day_month, "%d.%m")
+
 
             if match_date.month in range(1, 7):
                 return f'{self.day_month}.{second_half_season_year}'

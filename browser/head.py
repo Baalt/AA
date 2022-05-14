@@ -30,3 +30,6 @@ class Browser:
 
         ENTER_BUTTON_XPATH =  "//button[text()='Войти']"
         self.firefox.find_element(By.XPATH, ENTER_BUTTON_XPATH).click()
+
+    def close(self):
+        self.firefox.close()

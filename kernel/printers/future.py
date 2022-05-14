@@ -51,17 +51,27 @@ class BetPrinter:
         """)
 
 
-class Trainer:
-    def data(self):
-        pass
-        # {self.big_match_data['home_command_name']}
-        # Trainer
-        # Name: {self.big_match_data['home_trainer']['trainer_name']}
-        # Games
-        # with current trainer: {self.big_match_data['home_trainer']['count_games_with_command_home_trainer_trainer']}
-        #
-        # {self.big_match_data['away_command_name']}
-        # Trainer
-        # Name: {self.big_match_data['away_trainer']['trainer_name']}
-        # Games
-        # with current trainer: {self.big_match_data['away_trainer']['count_games_with_command_home_trainer_trainer']}
+class TrainerPrinter:
+    def __init__(self, big_match_data: dict):
+        self.big_match_data = big_match_data
+
+    def print_trainer_info(self):
+        try:
+            print(f"""
+            'Home command:________________ {self.big_match_data['home_command_name']}
+            'Home command trainer:________ {self.big_match_data['home_trainer']['trainer_name']}
+            'Count of games with command:_ {self.big_match_data['home_trainer']['count_games_with_command_home_trainer']}
+            """)
+
+        except Exception as err:
+            print('HOME TRAINER INFO ERROR: ', err)
+
+        try:
+            print(f"""
+            'Away command:________________ {self.big_match_data['away_command_name']}
+            'Away command trainer:________ {self.big_match_data['away_trainer']['trainer_name']}
+            'Count of games with command:_ {self.big_match_data['away_trainer']['count_games_with_command_away_trainer']}
+            """)
+
+        except Exception as err:
+            print('AWAY TRAINER INFO ERROR: ', err)

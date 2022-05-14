@@ -21,8 +21,11 @@ class MatchManager(MatchButtons):
         self.season_home_button_all, \
         self.season_away_button_all = self.teams_season_buttons_all
 
-        self.current_league_home_command_button, \
-        self.current_league_away_command_button = self.current_league_command_buttons(league=self.league)
+        try:
+            self.current_league_home_command_button, \
+            self.current_league_away_command_button = self.current_league_command_buttons(league=self.league)
+        except AttributeError:
+            raise AttributeError
 
     @property
     def get_data(self):
