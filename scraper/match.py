@@ -72,7 +72,7 @@ class MatchScraper(ScraperMethods):
                 elif len(tr) == 1:
                     text: str = tr.get_text(strip=True)
                     if text.startswith('❗'):
-                        self.all_match_data[home_away_trainer_key] = {f'count_games_with_command_{home_away_trainer_key}_trainer': n,
+                        self.all_match_data[home_away_trainer_key] = {f'count_games_with_command_{home_away_trainer_key}': n,
                                                                       'trainer_name': text}
                         break
 

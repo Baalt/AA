@@ -58,9 +58,9 @@ class TrainerPrinter:
     def print_trainer_info(self):
         try:
             print(f"""
-            'Home command:________________ {self.big_match_data['home_command_name']}
-            'Home command trainer:________ {self.big_match_data['home_trainer']['trainer_name']}
-            'Count of games with command:_ {self.big_match_data['home_trainer']['count_games_with_command_home_trainer']}
+    'Home command:________________ {self.big_match_data['home_command_name']}
+    'Home command trainer:________ {self.big_match_data['home_trainer']['trainer_name']}
+    'Count of games with command:_ {self.big_match_data['home_trainer']['count_games_with_command_home_trainer']}
             """)
 
         except Exception as err:
@@ -68,9 +68,9 @@ class TrainerPrinter:
 
         try:
             print(f"""
-            'Away command:________________ {self.big_match_data['away_command_name']}
-            'Away command trainer:________ {self.big_match_data['away_trainer']['trainer_name']}
-            'Count of games with command:_ {self.big_match_data['away_trainer']['count_games_with_command_away_trainer']}
+    'Away command:________________ {self.big_match_data['away_command_name']}
+    'Away command trainer:________ {self.big_match_data['away_trainer']['trainer_name']}
+    'Count of games with command:_ {self.big_match_data['away_trainer']['count_games_with_command_away_trainer']}
             """)
 
         except Exception as err:

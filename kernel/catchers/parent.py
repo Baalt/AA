@@ -156,7 +156,7 @@ class Catcher:
                        rate_direction=rate_direction,
                        category='A').print_rate()
 
-            TrainerPrinter(big_match_data=self.big_match_data)
+            TrainerPrinter(big_match_data=self.big_match_data).print_trainer_info()
 
 
         else:
@@ -195,6 +195,7 @@ class Catcher:
                                    rate_direction=rate_direction,
                                    category='B').print_rate()
 
+                        TrainerPrinter(big_match_data=self.big_match_data).print_trainer_info()
 
             # print('Big Data', big_data_percent, big_data_current_percent, big_data_opposing_percent)
             # print('Last Year', last_year_percent, last_year_current_percent, last_year_opposing_percent)
