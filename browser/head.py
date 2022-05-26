@@ -28,8 +28,13 @@ class Browser:
         password.send_keys(PASSWORD)
         self.firefox.implicitly_wait(10)
 
-        ENTER_BUTTON_XPATH =  "//button[text()='Войти']"
+        ENTER_BUTTON_XPATH = "//button[text()='Войти']"
         self.firefox.find_element(By.XPATH, ENTER_BUTTON_XPATH).click()
 
     def close(self):
         self.firefox.close()
+
+
+class LiveBrowser(Browser):
+    def open_live_page(self, url):
+        self.firefox.get(url)

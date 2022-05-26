@@ -35,12 +35,12 @@ class BetPrinter:
         League:_______________________ {self.league_name}
         Football match:_______________ {self.big_match_data['home_command_name']} - {self.big_match_data['away_command_name']}
         Category:_____________________ {self.category}
-        
+            
         Statistic Name:_______________ {self.statistic_name}
         Rate Type:____________________ {'Part for combine rate' if float(self.coeff_value) < 1.683 else 'Single rate'}
         Bet:__________________________ {self.coeff_total} {self.rate_direction}  
         Coefficient:__________________ {self.coeff_value}
-
+    
         Big Data:_____________________ {self.big_data_percent}%
         Last Year:____________________ {self.last_year_percent}%
         Similar Games:________________ {self.similar_percent}%
@@ -48,7 +48,57 @@ class BetPrinter:
         Last 12 Home-Away Games:______ {self.last_12_home_away_percent}%
         Last 8 Games:_________________ {self.last_8_percent}%
         Last 4 Games:_________________ {self.last_4_percent}%               
-        """)
+            """)
+
+
+class KushPrinter(BetPrinter):
+    def __init__(self, statistic_name: str, league_name: str, big_match_data: dict,
+                 big_data_percent: float, last_year_percent: float, similar_percent: float,
+                 last_20_percent: float, last_12_percent: float, last_8_percent: float, last_4_percent: float,
+                 coeff_total: float, coeff_value: float, rate_direction: str, category: str,
+                 big_data_kush_by_rate: float, last_year_kush_by_rate, similar_kush_by_rate: float,
+                 last_20_kush_by_rate: float, last_12_kush_by_rate,
+                 last_8_kush_by_rate: float, last_4_kush_by_rate: float):
+        super().__init__(statistic_name, league_name, big_match_data, big_data_percent, last_year_percent,
+                         similar_percent, last_20_percent, last_12_percent, last_8_percent, last_4_percent, coeff_total,
+                         coeff_value, rate_direction, category)
+
+        self.big_data_kush_by_rate = big_data_kush_by_rate
+        self.last_year_kush_by_rate = last_year_kush_by_rate
+        self.similar_kush_by_rate = similar_kush_by_rate
+        self.last_20_kush_by_rate = last_20_kush_by_rate
+        self.last_12_kush_by_rate = last_12_kush_by_rate
+        self.last_8_kush_by_rate = last_8_kush_by_rate
+        self.last_4_kush_by_rate = last_4_kush_by_rate
+
+    def print_rate(self):
+        print(f"""
+         League:_______________________ {self.league_name}
+         Football match:_______________ {self.big_match_data['home_command_name']} - {self.big_match_data['away_command_name']}
+         Category:_____________________ {self.category}
+
+         Statistic Name:_______________ {self.statistic_name}
+         Rate Type:____________________ {'Part for combine rate' if float(self.coeff_value) < 1.683 else 'Single rate'}
+         Bet:__________________________ {self.coeff_total} {self.rate_direction}  
+         Coefficient:__________________ {self.coeff_value}
+         
+         Big Data K_by_R:______________ {self.big_data_kush_by_rate}%
+         Last Year K_by_R:_____________ {self.last_year_kush_by_rate}%
+         Similar Games K_by_R:_________ {self.similar_kush_by_rate}%
+         Last 20 Games K_by_R:_________ {self.last_20_kush_by_rate}%
+         Last 12 Home-Away K_by_R:_____ {self.last_12_kush_by_rate}%
+         Last 8 Games K_by_R:__________ {self.last_8_kush_by_rate}%
+         Last 4 Games K_by_R:__________ {self.last_4_kush_by_rate}%               
+
+
+         Big Data:_____________________ {self.big_data_percent}%
+         Last Year:____________________ {self.last_year_percent}%
+         Similar Games:________________ {self.similar_percent}%
+         Last 20 Games:________________ {self.last_20_percent}%
+         Last 12 Home-Away Games:______ {self.last_12_home_away_percent}%
+         Last 8 Games:_________________ {self.last_8_percent}%
+         Last 4 Games:_________________ {self.last_4_percent}%               
+             """)
 
 
 class TrainerPrinter:
@@ -58,20 +108,42 @@ class TrainerPrinter:
     def print_trainer_info(self):
         try:
             print(f"""
-    'Home command:________________ {self.big_match_data['home_command_name']}
-    'Home command trainer:________ {self.big_match_data['home_trainer']['trainer_name']}
-    'Count of games with command:_ {self.big_match_data['home_trainer']['count_games_with_command_home_trainer']}
+        Home command:________________ {self.big_match_data['home_command_name']}
+        Home command trainer:________ {self.big_match_data['home_trainer']['trainer_name']}
+        Count of games with command:_ {self.big_match_data['home_trainer']['count_games_with_command_home_trainer']}
             """)
 
-        except Exception as err:
-            print('HOME TRAINER INFO ERROR: ', err)
+        except Exception:
+            try:
+                print(f"""
+        Home command:________________ {self.big_match_data['home_command_name']}
+        Home command trainer:________ {self.big_match_data['home_trainer']['trainer_name']}
+        Count of games with command:_ {self.big_match_data['home_trainer']['count_games_with_command']}
+                    """)
+
+            except Exception as err:
+                print('HOME TRAINER INFO ERROR: ', err)
 
         try:
             print(f"""
-    'Away command:________________ {self.big_match_data['away_command_name']}
-    'Away command trainer:________ {self.big_match_data['away_trainer']['trainer_name']}
-    'Count of games with command:_ {self.big_match_data['away_trainer']['count_games_with_command_away_trainer']}
+        Away command:________________ {self.big_match_data['away_command_name']}
+        Away command trainer:________ {self.big_match_data['away_trainer']['trainer_name']}
+        Count of games with command:_ {self.big_match_data['away_trainer']['count_games_with_command_away_trainer']}
             """)
 
-        except Exception as err:
-            print('AWAY TRAINER INFO ERROR: ', err)
+        except Exception:
+            try:
+                print(f"""
+        Away command:________________ {self.big_match_data['away_command_name']}
+        Away command trainer:________ {self.big_match_data['away_trainer']['trainer_name']}
+        Count of games with command:_ {self.big_match_data['away_trainer']['count_games_with_command']}
+                    """)
+            except Exception as err:
+                print('AWAY TRAINER INFO ERROR: ', err)
+
+
+class LeaderBoardPrinter:
+    def __init__(self, all_league_data: dict):
+        self.all_league_data = all_league_data
+
+

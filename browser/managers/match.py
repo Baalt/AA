@@ -4,14 +4,16 @@ from bs4 import BeautifulSoup
 from browser.head import Browser
 from browser.buttons.match import MatchButtons
 from scraper.match import MatchScraper
+from scraper.live import LiveScraper
 
 
 class MatchManager(MatchButtons):
-    def __init__(self, browser: Browser, league: str, all_match_data=dict):
+    def __init__(self, browser: Browser, league: str, all_live_data: dict, all_match_data=dict):
         super().__init__(browser)
         self.browser: Browser = browser
         self.league = league
         self.all_match_data = all_match_data()
+        self.all_live_data = all_live_data
 
         self.match_scraper = MatchScraper(all_match_data=self.all_match_data)
         # buttons
@@ -51,6 +53,14 @@ class MatchManager(MatchButtons):
         try:
             self.match_scraper.get_count_of_games_and_name_with_last_trainer(soup=soup)
             self.match_scraper.scrap_match_table_data(soup=soup)
+            commands_name = f"{self.all_match_data['home_command_name']}|{self.all_match_data['away_command_name']}"
+            statistics_name = self.match_scraper.scrap_statistic_name(soup=soup)
+            self.all_live_data[commands_name] = {}
+            try:
+                result_set = LiveScraper().scrap(soup=soup)
+                self.all_live_data[commands_name].update({statistics_name: result_set})
+            except AttributeError:
+                raise AttributeError
 
             for button in self.statistic_buttons[1:10]:
                 button.click()
@@ -61,6 +71,13 @@ class MatchManager(MatchButtons):
 
                 new_soup = BeautifulSoup(self.browser.get_html, 'lxml')
                 self.match_scraper.scrap_match_table_data(soup=new_soup)
+
+                statistics_name = self.match_scraper.scrap_statistic_name(soup=new_soup)
+                try:
+                    new_result_set = LiveScraper().scrap(soup=new_soup)
+                    self.all_live_data[commands_name].update({statistics_name: new_result_set})
+                except AttributeError:
+                    continue
 
             return True
 
