@@ -140,6 +140,10 @@ class FromDictToStructure:
                     ind_home_total = int(match["home_command_individual_total"])
                     ind_away_total = int(match["away_command_individual_total"])
                     total = ind_home_total + ind_away_total
+                    # print('total', total)
+                    # print('home_total', ind_home_total)
+                    # print('away_total', ind_away_total)
+
 
                 except ValueError:
                     continue

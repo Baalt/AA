@@ -58,4 +58,5 @@ class StatisticReport:
 
 if __name__ == '__main__':
     report = StatisticReport()
-    report.create_report('real_may.csv')
+    # report.create_report('real_may.csv')
+    report.create_report('real_all_stat.csv')
