@@ -15,6 +15,7 @@ from kernel.structures import FromDictToStructure
 from kernel.catchers.total import TotalCatcher
 from kernel.catchers.total_individual import IndividualTotalCatcher
 from kernel.catchers.handicap import HandicapCatcher
+from kernel.errors import SimilarCommandError
 
 
 class CompareStructureWithCoefficients(TotalCatcher,
@@ -46,7 +47,7 @@ class FromHistoryToRate(MathCore, FromDictToStructure):
                                      statistic_name,
                                      main_home_command_name,
                                      main_away_command_name):
-
+        command = None
         current_home_position = None
         current_away_position = None
         similar_home_commands_list = []
@@ -54,13 +55,27 @@ class FromHistoryToRate(MathCore, FromDictToStructure):
         self.similar_home_commands_list = None
         self.similar_away_commands_list = None
         try:
+
             for command in self.league_data[statistic_name]:
-                if main_home_command_name in command:
+                if main_home_command_name in command or command in main_away_command_name:
                     current_home_position = int(self.league_data[statistic_name][command]['position'])
-                if main_away_command_name in command:
+                elif '(' in command and command.split('(')[0].strip() in main_home_command_name:
+                    current_home_position = int(self.league_data[statistic_name][command]['position'])
+
+                if main_away_command_name in command or command in main_away_command_name:
                     current_away_position = int(self.league_data[statistic_name][command]['position'])
-        except Exception:
-            return None
+                elif '(' in command and command.split('(')[0].strip() in main_away_command_name:
+                    current_away_position = int(self.league_data[statistic_name][command]['position'])
+
+        except Exception as err:
+            print(err)
+            raise SimilarCommandError(f"""
+    SIMILAR_COMMAND_ERROR !!!
+    future/FromHistoryToRate.add_similar_commands_in_list
+            
+    HOME COMMAND NAME -- {main_home_command_name}
+    AWAY COMMAND NAME -- {main_away_command_name}
+    CURRENT COMMAND NAME -- {command if command else 'No commands in self.league_data[statistic_name]'}""")
 
         if current_home_position and current_away_position:
             for command in self.league_data[statistic_name]:
@@ -130,6 +145,9 @@ class FromHistoryToRate(MathCore, FromDictToStructure):
                             print('FromHistoryToRate.run.ERROR: ', err)
                             continue
 
+                except SimilarCommandError as err:
+                    print(err)
+
                 except AttributeError as err:
                     print('FromHistoryToRate.run.ERROR: ', err)
                     continue
@@ -192,7 +210,6 @@ if __name__ == '__main__':
                         raise err
                         # print('MAIN_SCRIPT_ERROR: ', err)
                         # continue
-
 
     print('Search is over.')
     #
