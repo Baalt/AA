@@ -15,7 +15,8 @@ from kernel.structures import FromDictToStructure
 from kernel.catchers.total import TotalCatcher
 from kernel.catchers.total_individual import IndividualTotalCatcher
 from kernel.catchers.handicap import HandicapCatcher
-from kernel.errors import SimilarCommandError, RunError, LiveScraperError, NotEnoughMatchError, MatchManagerError
+from kernel.errors import SimilarCommandError, RunError, LiveScraperError, NotEnoughMatchError, MatchManagerError, \
+    ValidStructureError
 
 
 class CompareStructureWithCoefficients(TotalCatcher,
@@ -137,6 +138,10 @@ class FromHistoryToRate(MathCore, FromDictToStructure):
                                                                                statistic_name=statistic_name)
                                     compare.search(statistic_name=statistic_name)
 
+                        except ValidStructureError as err:
+                            print('ValidStructureError: ', err)
+                            continue
+
                         except KeyError as err:
                             print('FromHistoryToRate.run.ERROR: ', err)
                             continue
@@ -146,7 +151,7 @@ class FromHistoryToRate(MathCore, FromDictToStructure):
                             continue
 
                 except SimilarCommandError as err:
-                    raise RunError(f'SimilarCommandError: {err}')
+                    raise RunError('SimilarCommandError: ', err)
 
 
                 except AttributeError as err:

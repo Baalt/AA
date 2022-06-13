@@ -17,3 +17,6 @@ class NotEnoughMatchError(LiveScraperError):
 class MatchManagerError(Exception):
     pass
 
+
+class ValidStructureError(Exception):
+    pass
