@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 
-from scraper.parent import ScraperMethods
+from scrapers.parent import ScraperMethods
 
 
 class CoefficientsScraper(ScraperMethods):

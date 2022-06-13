@@ -4,7 +4,7 @@ from pprint import pprint
 from time import sleep
 from bs4 import BeautifulSoup
 
-from scraper.schedule import MatchScheduleScraper
+from scrapers.schedule import MatchScheduleScraper
 from browser.head import Browser
 from browser.managers.match import MatchManager
 from browser.managers.league import LeagueManager
@@ -15,7 +15,7 @@ from kernel.structures import FromDictToStructure
 from kernel.catchers.total import TotalCatcher
 from kernel.catchers.total_individual import IndividualTotalCatcher
 from kernel.catchers.handicap import HandicapCatcher
-from kernel.errors import SimilarCommandError
+from kernel.errors import SimilarCommandError, RunError, LiveScraperError, NotEnoughMatchError, MatchManagerError
 
 
 class CompareStructureWithCoefficients(TotalCatcher,
@@ -146,7 +146,8 @@ class FromHistoryToRate(MathCore, FromDictToStructure):
                             continue
 
                 except SimilarCommandError as err:
-                    print(err)
+                    raise RunError(f'SimilarCommandError: {err}')
+
 
                 except AttributeError as err:
                     print('FromHistoryToRate.run.ERROR: ', err)
@@ -178,6 +179,11 @@ if __name__ == '__main__':
 
                         try:
                             match_manager = MatchManager(browser, league=league, all_live_data=all_live_data)
+
+                        except (NotEnoughMatchError, LiveScraperError, MatchManagerError) as err:
+                            print(err)
+                            continue
+
                         except AttributeError:
                             continue
 
@@ -205,6 +211,10 @@ if __name__ == '__main__':
                                                                all_league_data=all_league_data,
                                                                league_name=full_league_name)
                             math_collector.run()
+
+                    except RunError as err:
+                        print('RunError: ', err)
+                        continue
 
                     except Exception as err:
                         raise err

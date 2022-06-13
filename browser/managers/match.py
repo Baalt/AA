@@ -3,8 +3,9 @@ from bs4 import BeautifulSoup
 
 from browser.head import Browser
 from browser.buttons.match import MatchButtons
-from scraper.match import MatchScraper
-from scraper.live import LiveScraper
+from kernel.errors import MatchManagerError
+from scrapers.match import MatchScraper
+from scrapers.live import LiveScraper
 
 
 class MatchManager(MatchButtons):
@@ -27,7 +28,8 @@ class MatchManager(MatchButtons):
             self.current_league_home_command_button, \
             self.current_league_away_command_button = self.current_league_command_buttons(league=self.league)
         except AttributeError:
-            raise AttributeError
+            raise MatchManagerError('MatchManagerError address: browser/managers/match/MatchManager.__init__(...)'
+                                    'current_league_home_command_button, current_league_away_command_button NOT FOUND!!!')
 
     @property
     def get_data(self):
@@ -53,14 +55,12 @@ class MatchManager(MatchButtons):
         try:
             self.match_scraper.get_count_of_games_and_name_with_last_trainer(soup=soup)
             self.match_scraper.scrap_match_table_data(soup=soup)
-            # commands_name = f"{self.all_match_data['home_command_name']}|{self.all_match_data['away_command_name']}"
-            # statistics_name = self.match_scraper.scrap_statistic_name(soup=soup)
-            # self.all_live_data[commands_name] = {}
-            # try:
-            #     result_set = LiveScraper().scrap(soup=soup)
-            #     self.all_live_data[commands_name].update({statistics_name: result_set})
-            # except AttributeError:
-            #     raise AttributeError
+            commands_name = f"{self.all_match_data['home_command_name']}|{self.all_match_data['away_command_name']}"
+            statistics_name = self.match_scraper.scrap_statistic_name(soup=soup)
+            self.all_live_data[commands_name] = {}
+            result_set = LiveScraper().scrap(soup=soup)
+            self.all_live_data[commands_name].update({statistics_name: result_set})
+
 
             for button in self.statistic_buttons[1:10]:
                 button.click()
@@ -72,14 +72,13 @@ class MatchManager(MatchButtons):
                 soup = BeautifulSoup(self.browser.get_html, 'lxml')
                 self.match_scraper.scrap_match_table_data(soup=soup)
 
-                # statistics_name = self.match_scraper.scrap_statistic_name(soup=soup)
-                # try:
-                #     new_result_set = LiveScraper().scrap(soup=soup)
-                #     self.all_live_data[commands_name].update({statistics_name: new_result_set})
-                # except AttributeError:
-                #     continue
+                statistics_name = self.match_scraper.scrap_statistic_name(soup=soup)
+
+                result_set = LiveScraper().scrap(soup=soup)
+                self.all_live_data[commands_name].update({statistics_name: result_set})
 
             return True
 
         except IndexError:
+            print('MatchManagerError catch INDEX ERROR in address: browser/managers/match/MatchManager.get_match_data()')
             return None

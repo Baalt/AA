@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 
 from browser.head import Browser
 from browser.buttons.referee import RefereeButtons
-from scraper.referee import RefereeScraper
+from scrapers.referee import RefereeScraper
 
 
 class RefereeManager(RefereeButtons):

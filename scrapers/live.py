@@ -1,4 +1,5 @@
 from bs4 import BeautifulSoup
+from kernel.errors import NotEnoughMatchError, LiveScraperError
 
 
 class LiveDataStructure:
@@ -26,9 +27,10 @@ class LiveScraper:
             self.scrap_to_structure(set=self.away_set, data_container=away_data_container)
             result_set = self.from_data_to_db()
             return result_set
-        raise AttributeError
+        raise LiveScraperError('LiveScraperError address: scrapers/live/LiveScraper.scrap'
+                               'Failed to collect data on live table')
 
-    def from_data_to_db(self):
+    def from_data_to_db(self, threshold=20):
         total_over = None
         total_over_percent = None
         total_under = None
@@ -53,17 +55,21 @@ class LiveScraper:
             home_total, home_TO, home_TU = home_set
             home_TO, home_TO_match_count = home_TO.split('/')
             home_TU, home_TU_match_count = home_TU.split('/')
-            home_TO, home_TU, home_TO_match_count = int(home_TO), int(home_TU), int(home_TO_match_count)
-            if home_TO_match_count >= 60:
+            home_TO, home_TU, \
+            home_TO_match_count, home_TU_match_count = int(home_TO), int(home_TU), \
+                                                       int(home_TO_match_count), int(home_TU_match_count)
+            if home_TO_match_count >= threshold:
                 for away_set in self.away_set.total_sets:
                     away_total, away_TO, away_TU = away_set
                     if home_total == away_total:
                         away_TO, away_TO_match_count = away_TO.split('/')
                         away_TU, away_TU_match_count = away_TU.split('/')
-                        away_TO, away_TU, away_TO_match_count = int(away_TO), int(away_TU), int(away_TO_match_count)
-                        if away_TO_match_count >= 60:
-                            TO = (home_TO + away_TO) / 2
-                            TU = (home_TU + away_TU) / 2
+                        away_TO, away_TU, \
+                        away_TO_match_count, away_TU_match_count = int(away_TO), int(away_TU), \
+                                                                   int(away_TO_match_count), int(away_TU_match_count)
+                        if away_TO_match_count >= threshold:
+                            TO = (((home_TO * 100) / home_TO_match_count) + ((away_TO * 100) / away_TO_match_count)) / 2
+                            TU = (((home_TU * 100) / home_TU_match_count) + ((away_TU * 100) / away_TU_match_count)) / 2
                             if TO > 89:
                                 if total_over:
                                     if total_over_percent > TO:
@@ -83,10 +89,13 @@ class LiveScraper:
                                     total_under = home_total
 
                         else:
-                            raise AttributeError
-
+                            raise NotEnoughMatchError(
+                                f'The minimum number of matches to be analyzed must be -- {threshold}'
+                                f'Number of actual home team matches -- {away_TO_match_count}')
             else:
-                raise AttributeError
+                raise NotEnoughMatchError(
+                    f'The minimum number of matches to be analyzed must be -- {threshold}'
+                    f'Number of actual home team matches -- {home_TO_match_count}')
 
         # print('Total Over&% ', total_over, total_over_percent, '%')
         # print('Total Under&% ', total_under, total_under_percent, '%')
@@ -95,17 +104,21 @@ class LiveScraper:
             home_total, home_TO, home_TU = home_set
             home_TO, home_TO_match_count = home_TO.split('/')
             home_TU, home_TU_match_count = home_TU.split('/')
-            home_TO, home_TU, home_TO_match_count = int(home_TO), int(home_TU), int(home_TO_match_count)
-            if home_TO_match_count >= 60:
+            home_TO, home_TU, \
+            home_TO_match_count, home_TU_match_count = int(home_TO), int(home_TU), \
+                                                       int(home_TO_match_count), int(home_TU_match_count)
+            if home_TO_match_count >= threshold:
                 for away_set in self.away_set.opposing_individual_total_sets:
                     away_total, away_TO, away_TU = away_set
                     if home_total == away_total:
                         away_TO, away_TO_match_count = away_TO.split('/')
                         away_TU, away_TU_match_count = away_TU.split('/')
-                        away_TO, away_TU, away_TO_match_count = int(away_TO), int(away_TU), int(away_TO_match_count)
-                        if away_TO_match_count >= 60:
-                            TO = (home_TO + away_TO) / 2
-                            TU = (home_TU + away_TU) / 2
+                        away_TO, away_TU, \
+                        away_TO_match_count, away_TU_match_count = int(away_TO), int(away_TU), \
+                                                                   int(away_TO_match_count), int(away_TU_match_count)
+                        if away_TO_match_count >= threshold:
+                            TO = (((home_TO * 100) / home_TO_match_count) + ((away_TO * 100) / away_TO_match_count)) / 2
+                            TU = (((home_TU * 100) / home_TU_match_count) + ((away_TU * 100) / away_TU_match_count)) / 2
                             if TO > 89:
                                 if home_individual_over:
                                     if home_individual_over_percent > TO:
@@ -131,17 +144,21 @@ class LiveScraper:
             away_total, away_TO, away_TU = away_set
             away_TO, away_TO_match_count = away_TO.split('/')
             away_TU, away_TU_match_count = away_TU.split('/')
-            away_TO, away_TU, away_TO_match_count = int(away_TO), int(away_TU), int(away_TO_match_count)
-            if away_TO_match_count >= 60:
+            away_TO, away_TU, \
+            away_TO_match_count, away_TU_match_count = int(away_TO), int(away_TU), \
+                                                       int(away_TO_match_count), int(away_TU_match_count)
+            if away_TO_match_count >= threshold:
                 for home_set in self.home_set.opposing_individual_total_sets:
                     home_total, home_TO, home_TU = home_set
                     if away_total == home_total:
                         home_TO, home_TO_match_count = home_TO.split('/')
                         home_TU, home_TU_match_count = home_TU.split('/')
-                        home_TO, home_TU, home_TO_match_count = int(home_TO), int(home_TU), int(home_TO_match_count)
-                        if home_TO_match_count >= 60:
-                            TO = (home_TO + away_TO) / 2
-                            TU = (home_TU + away_TU) / 2
+                        home_TO, home_TU, \
+                        home_TO_match_count, home_TU_match_count = int(home_TO), int(home_TU), \
+                                                                   int(home_TO_match_count), int(home_TU_match_count)
+                        if home_TO_match_count >= threshold:
+                            TO = (((home_TO * 100) / home_TO_match_count) + ((away_TO * 100) / away_TO_match_count)) / 2
+                            TU = (((home_TU * 100) / home_TU_match_count) + ((away_TU * 100) / away_TU_match_count)) / 2
                             if TO > 89:
                                 if away_individual_over:
                                     if away_individual_over_percent > TO:
@@ -168,17 +185,18 @@ class LiveScraper:
             home_handicap_percent, home_handicap_match_count = home_handicap_percent_set.split('/')
             home_handicap_percent, home_handicap_match_count = int(home_handicap_percent), int(
                 home_handicap_match_count)
-            if home_handicap_match_count >= 60:
+            if home_handicap_match_count >= threshold:
                 for away_handicap_set in self.away_set.opposing_handicap_sets:
                     away_handicap, away_handicap_percent_set = away_handicap_set
                     if home_handicap == away_handicap:
                         away_handicap_percent, away_handicap_match_count = away_handicap_percent_set.split('/')
                         away_handicap_percent, away_handicap_match_count = int(away_handicap_percent), int(
                             away_handicap_match_count)
-                        if away_handicap_match_count >= 60:
+                        if away_handicap_match_count >= threshold:
                             home_handicap_percent = int(home_handicap_percent)
                             away_handicap_percent = int(away_handicap_percent)
-                            handicap_percent = (home_handicap_percent + away_handicap_percent) / 2
+                            handicap_percent = (((home_handicap_percent * 100) / home_handicap_match_count) + (
+                                        (away_handicap_percent * 100) / away_handicap_match_count)) / 2
                             if handicap_percent > 89:
                                 if home_handicap_result_percent:
                                     if home_handicap_result_percent > handicap_percent:
@@ -195,17 +213,18 @@ class LiveScraper:
             away_handicap_percent, away_handicap_match_count = away_handicap_percent_set.split('/')
             away_handicap_percent, away_handicap_match_count = int(away_handicap_percent), int(
                 away_handicap_match_count)
-            if away_handicap_match_count >= 60:
+            if away_handicap_match_count >= threshold:
                 for home_handicap_set in self.home_set.opposing_handicap_sets:
                     home_handicap, home_handicap_percent_set = home_handicap_set
                     if away_handicap == home_handicap:
                         home_handicap_percent, home_handicap_match_count = home_handicap_percent_set.split('/')
                         home_handicap_percent, home_handicap_match_count = int(home_handicap_percent), int(
                             home_handicap_match_count)
-                        if home_handicap_match_count >= 60:
+                        if home_handicap_match_count >= threshold:
                             home_handicap_percent = int(home_handicap_percent)
                             away_handicap_percent = int(away_handicap_percent)
-                            handicap_percent = (home_handicap_percent + away_handicap_percent) / 2
+                            handicap_percent = (((home_handicap_percent * 100) / home_handicap_match_count) + (
+                                    (away_handicap_percent * 100) / away_handicap_match_count)) / 2
                             if handicap_percent > 89:
                                 if away_handicap_result_percent:
                                     if away_handicap_result_percent > handicap_percent:

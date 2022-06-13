@@ -3,8 +3,8 @@ from bs4 import BeautifulSoup
 
 from browser.head import Browser
 from browser.buttons.match import MatchButtons
-from scraper.parent import ScraperMethods
-from scraper.coefficients import CoefficientsScraper
+from scrapers.parent import ScraperMethods
+from scrapers.coefficients import CoefficientsScraper
 
 
 class CoefficientManager(MatchButtons, ScraperMethods):

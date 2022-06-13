@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 
-from scraper.parent import ScraperMethods
+from scrapers.parent import ScraperMethods
 from kernel.filters.big_data import MatchDataNormalize
 
 

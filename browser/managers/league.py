@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 
 from browser.head import Browser
 from browser.buttons.league import LeagueButtons
-from scraper.league import LeagueScraper
+from scrapers.league import LeagueScraper
 
 
 class LeagueManager(LeagueButtons):
