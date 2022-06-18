@@ -189,7 +189,8 @@ if __name__ == '__main__':
                             print(err)
                             continue
 
-                        except AttributeError:
+                        except AttributeError as err:
+                            print(err)
                             continue
 
                         match_manager.filter_out(number_of_matches=100)

@@ -20,6 +20,7 @@ class Browser:
     def login(self):
         self.firefox.get(SOURCE + '/login')
         self.firefox.implicitly_wait(10)
+        input('Delete ad and click "Enter"')
 
         email = self.firefox.find_element(By.ID, 'email', )
         password = self.firefox.find_element(By.ID, 'password')

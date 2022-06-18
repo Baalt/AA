@@ -16,7 +16,7 @@ class LeagueManager(LeagueButtons):
     @property
     def get_data(self):
         all_league_data: dict = {}
-        self.league_scraper.scrap(self.soup, all_league_data, tooltip=True)
+        self.league_scraper.scrap(self.soup, all_league_data, tooltip=True, goal=True)
         for button in self.statistic_buttons[1:10]:
             button.click()
             sleep(1)

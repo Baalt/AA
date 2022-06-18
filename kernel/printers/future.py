@@ -146,4 +146,50 @@ class LeaderBoardPrinter:
     def __init__(self, all_league_data: dict):
         self.all_league_data = all_league_data
 
+    def show_league_table(self):
+        print('GOALS')
+        print('№_', 'Command Name        ', 'games count', 'points', 'total|individual|opposing')
+        try:
+            for command_name in self.all_league_data['Голы']:
+                try:
+                    points = self.all_league_data['Голы'][command_name]['points']
+                    position = self.all_league_data['Голы'][command_name]['position']
+                    games_count = self.all_league_data['Голы'][command_name]['games_count']
+                    total = self.all_league_data['Голы'][command_name]['total']
 
+                    print('{:>2}'.format(position),
+                          '{:<30}'.format(command_name),
+                          '{:>11}'.format(games_count),
+                          '{:>6}'.format(points),
+                          '{:>29}'.format(total))
+
+                except KeyError as err:
+                    print(err)
+                    print('Error address -- LeaderBoardPrinter.show_league_table')
+        except KeyError as err:
+            print(err)
+            print('Error address -- LeaderBoardPrinter.show_league_table')
+            print('all_league_data["Голы"] is empty')
+
+    def show_current_static_table(self, statistic_name):
+        print(statistic_name)
+        print('№_', 'Command Name        ', 'games count', 'total|individual|opposing')
+        try:
+            for command_name in self.all_league_data[statistic_name]:
+                try:
+                    position = self.all_league_data[statistic_name][command_name]['position']
+                    games_count = self.all_league_data[statistic_name][command_name]['games_count']
+                    total = self.all_league_data[statistic_name][command_name]['total']
+
+                    print('{:>2}'.format(position),
+                          '{:<20}'.format(command_name),
+                          '{:>11}'.format(games_count),
+                          '{:>29}'.format(total))
+
+                except KeyError as err:
+                    print(err)
+                    print('Error address -- LeaderBoardPrinter.show_current_static_table')
+        except KeyError as err:
+            print(err)
+            print('Error address -- LeaderBoardPrinter.show_current_static_table')
+            print(print(f'all_league_data[{statistic_name}] is empty'))

@@ -153,3 +153,4 @@ fabric.properties
 geckodriver.log
 config.py
 dev_tests.py
+test.py
