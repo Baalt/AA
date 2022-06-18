@@ -1,4 +1,4 @@
-from kernel.printers.future import BetPrinter, TrainerPrinter, KushPrinter
+from kernel.printers.future import BetPrinter, TrainerPrinter, KushPrinter, LeaderBoardPrinter
 from kernel.structures import HomeDataStructure, AwayDataStructure
 
 
@@ -8,13 +8,15 @@ class Catcher:
                  away_structure: AwayDataStructure,
                  big_match_data: dict,
                  coefficients: dict,
-                 statistic_name: str):
+                 statistic_name: str,
+                 all_league_data: dict):
 
         self.home_structure = home_structure
         self.away_structure = away_structure
         self.big_match_data = big_match_data
         self.coefficients = coefficients
         self.statistic_name = statistic_name
+        self.all_league_data = all_league_data
 
     def total_calculation(self, coeff_set, seq: list):
         over_list = []
@@ -131,28 +133,43 @@ class Catcher:
             last_4_kush_by_rate = self.kush_calculate(percent=last_4_percent,
                                                       coefficient=coeff_set[coeff_under_over_key])
 
-            KushPrinter(statistic_name=statistic_name,
-                        league_name=league_name,
-                        big_data_percent=big_data_percent,
-                        last_year_percent=last_year_percent,
-                        similar_percent=similar_percent,
-                        last_20_percent=last_20_percent,
-                        last_12_percent=last_12_percent,
-                        last_8_percent=last_8_percent,
-                        last_4_percent=last_4_percent,
-                        big_match_data=self.big_match_data,
-                        coeff_total=coeff_set['total_number'],
-                        coeff_value=coeff_set[coeff_under_over_key],
-                        rate_direction=rate_direction,
-                        category='Kush+',
-                        big_data_kush_by_rate=big_data_kush_by_rate,
-                        last_year_kush_by_rate=last_year_kush_by_rate,
-                        similar_kush_by_rate=similar_kush_by_rate,
-                        last_20_kush_by_rate=last_20_kush_by_rate,
-                        last_12_kush_by_rate=last_12_kush_by_rate,
-                        last_8_kush_by_rate=last_8_kush_by_rate,
-                        last_4_kush_by_rate=last_4_kush_by_rate).print_rate()
-            TrainerPrinter(big_match_data=self.big_match_data).print_trainer_info()
+            BetPrinter(statistic_name=statistic_name,
+                       league_name=league_name,
+                       big_data_percent=big_data_percent,
+                       last_year_percent=last_year_percent,
+                       similar_percent=similar_percent,
+                       last_20_percent=last_20_percent,
+                       last_12_percent=last_12_percent,
+                       last_8_percent=last_8_percent,
+                       last_4_percent=last_4_percent,
+                       big_match_data=self.big_match_data,
+                       coeff_total=coeff_set['total_number'],
+                       coeff_value=coeff_set[coeff_under_over_key],
+                       rate_direction=rate_direction,
+                       category='B').print_rate()
+
+            # KushPrinter(statistic_name=statistic_name,
+            #             league_name=league_name,
+            #             big_data_percent=big_data_percent,
+            #             last_year_percent=last_year_percent,
+            #             similar_percent=similar_percent,
+            #             last_20_percent=last_20_percent,
+            #             last_12_percent=last_12_percent,
+            #             last_8_percent=last_8_percent,
+            #             last_4_percent=last_4_percent,
+            #             big_match_data=self.big_match_data,
+            #             coeff_total=coeff_set['total_number'],
+            #             coeff_value=coeff_set[coeff_under_over_key],
+            #             rate_direction=rate_direction,
+            #             category='Kush+',
+            #             big_data_kush_by_rate=big_data_kush_by_rate,
+            #             last_year_kush_by_rate=last_year_kush_by_rate,
+            #             similar_kush_by_rate=similar_kush_by_rate,
+            #             last_20_kush_by_rate=last_20_kush_by_rate,
+            #             last_12_kush_by_rate=last_12_kush_by_rate,
+            #             last_8_kush_by_rate=last_8_kush_by_rate,
+            #             last_4_kush_by_rate=last_4_kush_by_rate).print_rate()
+            # TrainerPrinter(big_match_data=self.big_match_data).print_trainer_info()
 
             if big_data_kush_by_rate and last_year_kush_by_rate and similar_kush_by_rate \
                     and last_20_kush_by_rate and last_12_kush_by_rate and last_8_kush_by_rate:
@@ -181,6 +198,9 @@ class Catcher:
                                 last_8_kush_by_rate=last_8_kush_by_rate,
                                 last_4_kush_by_rate=last_4_kush_by_rate).print_rate()
                     TrainerPrinter(big_match_data=self.big_match_data).print_trainer_info()
+                    board_printer = LeaderBoardPrinter(all_league_data=self.all_league_data)
+                    board_printer.show_league_table()
+                    board_printer.show_current_static_table(statistic_name=statistic_name)
 
             if similar_percent and last_20_percent and last_12_percent and last_8_percent and last_4_percent:
                 if similar_percent >= ord_or_exp and last_20_percent >= ord_or_exp and last_12_percent > ord_or_exp:
@@ -247,7 +267,6 @@ class Catcher:
                               last_4_current_percent=last_4_current_percent,
                               last_4_opposing_percent=last_4_opposing_percent)
 
-
         if similar_current_percent >= ord_or_exp and similar_opposing_percent >= ord_or_exp:
             similar_percent = (similar_current_percent + similar_opposing_percent) / 2
         else:
@@ -291,6 +310,9 @@ class Catcher:
                        rate_direction=rate_direction,
                        category='A').print_rate()
             TrainerPrinter(big_match_data=self.big_match_data).print_trainer_info()
+            board_printer = LeaderBoardPrinter(all_league_data=self.all_league_data)
+            board_printer.show_league_table()
+            board_printer.show_current_static_table(statistic_name=statistic_name)
 
     def kush_calculate(self, percent, coefficient):
         if not isinstance(percent, float):

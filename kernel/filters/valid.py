@@ -154,22 +154,23 @@ class ValidStructureFilter:
                         return True
 
                     raise ValidStructureError(
-                        'ValidStructureError address - kernel/filters/valid/ValidStructureFilter.is_home_structure_valid()'
-                        'Insufficient number of matches in HOME structures to start analysis'
-                        f'length last year of games must be >= 20 -- {len(self.home_structure.last_year_total_current_home_command_in_home_away_games)}'
-                        f'length last 12 of games must be >= 12 -- {len(self.home_structure.last_12_games_total_current_home_command_by_year_in_home_games)}'
-                        f'length similar games must be >= 8 -- {len(self.home_structure.similar_command_total_current_home_big_data_home_away_games)}')
+                        f"""ValidStructureError address - kernel/filters/valid/ValidStructureFilter.is_home_structure_valid(
+                            Insufficient number of matches in HOME structures to start analysis
+                            length last year of games must be >= 20 -- {len(self.home_structure.last_year_total_current_home_command_in_home_away_games)}
+                            length last 12 of games must be >= 12 -- {len(self.home_structure.last_12_games_total_current_home_command_by_year_in_home_games)}
+                            length similar games must be >= 8 -- {len(self.home_structure.similar_command_total_current_home_big_data_home_away_games)}""")
+
                 raise ValidStructureError(
-                    'Mismatch of last 12 home structures, must be the same length'
-                    f'len of last 12 home structure {len(self.home_structure.last_12_games_total_current_home_command_by_year_in_home_games)}'
-                    f'len of last 12 ind home structure {len(self.home_structure.last_12_games_individual_total_current_home_by_year_in_home_games)}'
-                    f'len of last 12 opposing home structure {len(self.home_structure.last_12_games_individual_total_opposing_teams_current_home_by_year_in_away_games)}')
+                    f"""Mismatch of last 12 home structures, must be the same length
+                        len of last 12 home structure {len(self.home_structure.last_12_games_total_current_home_command_by_year_in_home_games)}
+                        len of last 12 ind home structure {len(self.home_structure.last_12_games_individual_total_current_home_by_year_in_home_games)}
+                        len of last 12 opposing home structure {len(self.home_structure.last_12_games_individual_total_opposing_teams_current_home_by_year_in_away_games)}""")
 
             raise ValidStructureError(
-                'Mismatch of last year home structures, must be the same length'
-                f'len of last year home structure {len(self.home_structure.last_year_total_current_home_command_in_home_away_games)}'
-                f'len of last year ind home structure {len(self.home_structure.last_year_individual_total_current_home_command_in_home_away_games)}'
-                f'len of last year opposing home structure {len(self.home_structure.last_year_individual_total_opposing_teams_current_home_in_home_away_games)}')
+                f"""Mismatch of last year home structures, must be the same length
+                    len of last year home structure {len(self.home_structure.last_year_total_current_home_command_in_home_away_games)}
+                    len of last year ind home structure {len(self.home_structure.last_year_individual_total_current_home_command_in_home_away_games)}
+                    len of last year opposing home structure {len(self.home_structure.last_year_individual_total_opposing_teams_current_home_in_home_away_games)}""")
         raise ValidStructureError(f'Home structure error - {self.home_structure}')
 
     def is_away_structure_valid(self):
@@ -188,20 +189,20 @@ class ValidStructureFilter:
                         return True
 
                     raise ValidStructureError(
-                        'ValidStructureError address - kernel/filters/valid/ValidStructureFilter.is_away_structure_valid()'
-                        'Insufficient number of matches in AWAY structures to start analysis'
-                        f'length last year of games must be >= 20 -- {len(self.away_structure.last_year_total_current_away_command_in_home_away_games)}'
-                        f'length last 12 of games must be >= 12 -- {len(self.away_structure.last_12_games_total_current_away_command_by_year_in_away_games)}'
-                        f'length similar games must be >= 8 -- {len(self.away_structure.similar_command_total_current_away_big_data_home_away_games)}')
+                        f"""ValidStructureError address - kernel/filters/valid/ValidStructureFilter.is_away_structure_valid()
+                            Insufficient number of matches in AWAY structures to start analysis
+                            length last year of games must be >= 20 -- {len(self.away_structure.last_year_total_current_away_command_in_home_away_games)}
+                            length last 12 of games must be >= 12 -- {len(self.away_structure.last_12_games_total_current_away_command_by_year_in_away_games)}
+                            length similar games must be >= 8 -- {len(self.away_structure.similar_command_total_current_away_big_data_home_away_games)}""")
 
                 raise ValidStructureError(
-                    'Mismatch of last 12 away structures, must be the same length'
-                    f'len of last 12 away structure {len(self.away_structure.last_12_games_total_current_away_command_by_year_in_away_games)}'
-                    f'len of last 12 ind away structure {len(self.away_structure.last_12_games_individual_total_current_away_by_year_in_away_games)}'
-                    f'len of last 12 opposing away structure {len(self.away_structure.last_12_games_individual_total_opposing_teams_current_away_by_year_in_home_games)}')
+                    f"""Mismatch of last 12 away structures, must be the same length
+                        len of last 12 away structure {len(self.away_structure.last_12_games_total_current_away_command_by_year_in_away_games)}
+                        len of last 12 ind away structure {len(self.away_structure.last_12_games_individual_total_current_away_by_year_in_away_games)}
+                        len of last 12 opposing away structure {len(self.away_structure.last_12_games_individual_total_opposing_teams_current_away_by_year_in_home_games)}""")
             raise ValidStructureError(
-                'Mismatch of away structures, must be the same length'
-                f'len of last year away structure {len(self.away_structure.last_year_total_current_away_command_in_home_away_games)}'
-                f'len of last year ind away structure {len(self.away_structure.last_year_individual_total_current_away_command_in_home_away_games)}'
-                f'len of last year opposing away structure {len(self.away_structure.last_year_individual_total_opposing_teams_current_away_in_home_away_games)}')
+                f"""Mismatch of away structures, must be the same length
+                    len of last year away structure {len(self.away_structure.last_year_total_current_away_command_in_home_away_games)}
+                    len of last year ind away structure {len(self.away_structure.last_year_individual_total_current_away_command_in_home_away_games)}
+                    len of last year opposing away structure {len(self.away_structure.last_year_individual_total_opposing_teams_current_away_in_home_away_games)}""")
         raise ValidStructureError(f'Home structure error - {self.away_structure}')

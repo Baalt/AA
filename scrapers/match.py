@@ -17,12 +17,12 @@ class MatchScraper(ScraperMethods):
 
     def scrap_commands_name(self, soup: BeautifulSoup):
         self.home_command_name = soup.find_all('div',
-                                               attrs={'class': "media-body"})[0].find('a').get_text(strip=True)
+                                               attrs={'class': "media-body"})[0].find('h5').get_text(strip=True)
         self.away_command_name = soup.find_all('div',
-                                               attrs={'class': "media-body"})[1].find('a').get_text(strip=True)
+                                               attrs={'class': "media-body"})[1].find('h5').get_text(strip=True)
 
-        self.all_match_data['home_command_name'] = self.home_command_name
-        self.all_match_data['away_command_name'] = self.away_command_name
+        self.all_match_data['home_command_name'] = self.home_command_name.strip('()')
+        self.all_match_data['away_command_name'] = self.away_command_name.strip('()')
 
     def scrap_match_table_data(self, soup, tooltip=False):
         home_table = soup.find_all('table',
