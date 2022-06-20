@@ -73,6 +73,7 @@ class KushPrinter(BetPrinter):
 
     def print_rate(self):
         print(f"""
+         ###############################################################################################################
          League:_______________________ {self.league_name}
          Football match:_______________ {self.big_match_data['home_command_name']} - {self.big_match_data['away_command_name']}
          Category:_____________________ {self.category}
@@ -82,22 +83,22 @@ class KushPrinter(BetPrinter):
          Bet:__________________________ {self.coeff_total} {self.rate_direction}  
          Coefficient:__________________ {self.coeff_value}
          
-         Big Data K_by_R:______________ {self.big_data_kush_by_rate}%
-         Last Year K_by_R:_____________ {self.last_year_kush_by_rate}%
-         Similar Games K_by_R:_________ {self.similar_kush_by_rate}%
-         Last 20 Games K_by_R:_________ {self.last_20_kush_by_rate}%
-         Last 12 Home-Away K_by_R:_____ {self.last_12_kush_by_rate}%
-         Last 8 Games K_by_R:__________ {self.last_8_kush_by_rate}%
-         Last 4 Games K_by_R:__________ {self.last_4_kush_by_rate}%               
+         Big Data K_by_R:______________ {self.big_data_kush_by_rate} $kush$
+         Last Year K_by_R:_____________ {self.last_year_kush_by_rate} $kush$
+         Similar Games K_by_R:_________ {self.similar_kush_by_rate} $kush$
+         Last 20 Games K_by_R:_________ {self.last_20_kush_by_rate} $kush$
+         Last 12 Home-Away K_by_R:_____ {self.last_12_kush_by_rate} $kush$
+         Last 8 Games K_by_R:__________ {self.last_8_kush_by_rate} $kush$
+         Last 4 Games K_by_R:__________ {self.last_4_kush_by_rate} $kush$               
 
 
-         Big Data:_____________________ {self.big_data_percent}%
-         Last Year:____________________ {self.last_year_percent}%
-         Similar Games:________________ {self.similar_percent}%
-         Last 20 Games:________________ {self.last_20_percent}%
-         Last 12 Home-Away Games:______ {self.last_12_home_away_percent}%
-         Last 8 Games:_________________ {self.last_8_percent}%
-         Last 4 Games:_________________ {self.last_4_percent}%               
+         Big Data:_____________________ {self.big_data_percent} %
+         Last Year:____________________ {self.last_year_percent} %
+         Similar Games:________________ {self.similar_percent} %
+         Last 20 Games:________________ {self.last_20_percent} %
+         Last 12 Home-Away Games:______ {self.last_12_home_away_percent} %
+         Last 8 Games:_________________ {self.last_8_percent} %
+         Last 4 Games:_________________ {self.last_4_percent} %               
              """)
 
 
@@ -148,7 +149,7 @@ class LeaderBoardPrinter:
 
     def show_league_table(self):
         print('GOALS')
-        print('№_', 'Command Name        ', 'games count', 'points', 'total|individual|opposing')
+        print('№_', 'Command Name                  ', 'games count', 'points', 'total|individual|opposing')
         try:
             for command_name in self.all_league_data['Голы']:
                 try:

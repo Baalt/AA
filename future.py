@@ -95,6 +95,7 @@ class FromHistoryToRate(MathCore, FromDictToStructure):
 
                 except Exception as err:
                     print('FromHistoryToRate.add_similar_commands_in_list.ERROR: ', err)
+                    # raise err
                     return None
 
         self.similar_home_commands_list = similar_home_commands_list
