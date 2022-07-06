@@ -37,5 +37,9 @@ class Browser:
 
 
 class LiveBrowser(Browser):
-    def open_live_page(self, url):
+    def open_page(self, url):
         self.firefox.get(url)
+
+
+class BookBrowser(LiveBrowser):
+    pass

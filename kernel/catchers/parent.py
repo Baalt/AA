@@ -133,6 +133,32 @@ class Catcher:
             last_4_kush_by_rate = self.kush_calculate(percent=last_4_percent,
                                                       coefficient=coeff_set[coeff_under_over_key])
 
+            KushPrinter(statistic_name=statistic_name,
+                        league_name=league_name,
+                        big_data_percent=big_data_percent,
+                        last_year_percent=last_year_percent,
+                        similar_percent=similar_percent,
+                        last_20_percent=last_20_percent,
+                        last_12_percent=last_12_percent,
+                        last_8_percent=last_8_percent,
+                        last_4_percent=last_4_percent,
+                        big_match_data=self.big_match_data,
+                        coeff_total=coeff_set['total_number'],
+                        coeff_value=coeff_set[coeff_under_over_key],
+                        rate_direction=rate_direction,
+                        category='Kush+',
+                        big_data_kush_by_rate=big_data_kush_by_rate,
+                        last_year_kush_by_rate=last_year_kush_by_rate,
+                        similar_kush_by_rate=similar_kush_by_rate,
+                        last_20_kush_by_rate=last_20_kush_by_rate,
+                        last_12_kush_by_rate=last_12_kush_by_rate,
+                        last_8_kush_by_rate=last_8_kush_by_rate,
+                        last_4_kush_by_rate=last_4_kush_by_rate).print_rate()
+            TrainerPrinter(big_match_data=self.big_match_data).print_trainer_info()
+            board_printer = LeaderBoardPrinter(all_league_data=self.all_league_data)
+            board_printer.show_league_table()
+            board_printer.show_current_static_table(statistic_name=statistic_name)
+
             if big_data_kush_by_rate and last_year_kush_by_rate and similar_kush_by_rate \
                     and last_20_kush_by_rate and last_12_kush_by_rate and last_8_kush_by_rate:
                 min_kush = min(big_data_kush_by_rate, last_year_kush_by_rate, similar_kush_by_rate,
